@@ -40,7 +40,7 @@
     <link rel="stylesheet" type="text/css" href="/built/screen.css" /> 
     <link rel="stylesheet" type="text/css" href="/css/casper-two.css" /> 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
-    
+     <link rel="stylesheet" href="/css/override.css" /> 
 
     <link href="/index.xml" rel="alternate" type="application/rss+xml" title="" />  
 
@@ -53,7 +53,7 @@
   <div class="inner">
     <div class="site-header-content">
       <h1 class="site-title"> Lifelong Learning  </h1>
-        <h2 class="site-description">Deconstructing Data Science One Article at a Time </h2>
+        <h2 class="site-description">Exploring Data Science One Article at a Time </h2>
     </div>
 
     <nav class="site-nav">
@@ -66,7 +66,11 @@
             </li>
         
             <li class="" role="menuitem">
-              <a href="/post">Articles</a>
+              <a href="/categories/articles/">Articles</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/market-basket-analysis">projects</a>
             </li>
         
             <li class="" role="menuitem">
@@ -75,6 +79,10 @@
         
             <li class="" role="menuitem">
               <a href="/page/about/">About</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/contact/">Contact</a>
             </li>
         
       </ul></div>
@@ -105,30 +113,29 @@
       
 
 
+
 <article class="post-card post"> 
     
-    <a class="post-card-image-link" href="/2019/09/loading-merging-and-joining-datasets/">
-      <div class="post-card-image" style="background-image: url(/img/stefan-kunze-v8SjXTTI0GA-unsplash.jpg)"></div>
+    <a class="post-card-image-link" href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/">
+      <div class="post-card-image" style="background-image: url(/img/toa-heftiba-9Xfn1rEpL0c-unsplash.jpg)"></div>
     </a>
     
 
     <div class="post-card-content">
-      <a class="post-card-content-link" href="/2019/09/loading-merging-and-joining-datasets/">
+      <a class="post-card-content-link" href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/">
           <header class="post-card-header">
               <span class="post-card-tags">
-              #Data Cleaning 
-              #Data Mining 
-              #Data Wrangling 
-              #Data Management  </span>
+              #Principal Component 
+              #Bootstrap 
+              #Clustering 
+              #Customer Segmentation  </span>
               
-              <h2 class="post-card-title">Loading, Merging and Joining Datasets</h2>
+              <h2 class="post-card-title">Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation</h2>
           </header>
           <section class="post-card-excerpt">
               
-                <p>This is the minimal coding necessary to assemble various data feeds and sort out the likes of variables naming &amp; new features creation plus some general housekeeping tasks. It includes general housekeeping tasks like sorting variables names, creating essential features and sorting out variables order
-I will continue to add to this code should the need arise for other features to be created.
-THE DATASET
-library(tidyverse)library(lubridate)library(readr)The dataset I’m using here accompanies a Redbooks publication called Building 360-Degree Information Applications which is available as a free PDF download. ...  </p>
+                <p>Clustering is one of my favourite analytic methods: it resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforward concept to explain non technical audiences.
+Earlier this year I’ve used the popular K-Means clustering algorithm to segment customers based on their response to a series of marketing campaigns. For that post I’ve deliberately used a basic dataset to show that it is not only a relatively easy analysis to carry out but can also help unearthing interesting patterns of behaviour in your customer base even when using few customer attributes. ...  </p>
               
           </section>
       </a>
@@ -139,6 +146,14 @@ library(tidyverse)library(lubridate)library(readr)The dataset I’m using her
       </footer>
     </div>
 </article>
+
+
+
+
+
+
+
+
 
 
 <article class="post-card post"> 
@@ -154,9 +169,7 @@ library(tidyverse)library(lubridate)library(readr)The dataset I’m using her
               <span class="post-card-tags">
               #Machine Learning 
               #Tidyverse 
-              #Classification 
-              #Churn 
-              #API  </span>
+              #Classification  </span>
               
               <h2 class="post-card-title">Modelling with Tidymodels and Parsnip - A Tidy Approach to a Classification Problem</h2>
           </header>
@@ -176,24 +189,25 @@ parsnip is the brainchild of RStudio’s Max Khun (of caret fame) and Davis Vaug
 </article>
 
 
+
+
+
+
 <article class="post-card post"> 
     
-    <a class="post-card-image-link" href="/2019/05/an-introduction-to-customer-segmentation/">
+    <a class="post-card-image-link" href="/2019/05/a-gentle-introduction-to-customer-segmentation/">
       <div class="post-card-image" style="background-image: url(/img/nick-karvounis-SWIoVDRZWUY-unsplash.jpg)"></div>
     </a>
     
 
     <div class="post-card-content">
-      <a class="post-card-content-link" href="/2019/05/an-introduction-to-customer-segmentation/">
+      <a class="post-card-content-link" href="/2019/05/a-gentle-introduction-to-customer-segmentation/">
           <header class="post-card-header">
               <span class="post-card-tags">
-              #Unsupervised Learning 
-              #K Means Clustering 
-              #Customer Segmentation 
-              #Machine Learning 
-              #Marketing Strategies  </span>
+              #Clustering 
+              #Customer Segmentation  </span>
               
-              <h2 class="post-card-title">An Introduction to Customer Segmentation: Using K-Means Clustering to Understand Marketing Response</h2>
+              <h2 class="post-card-title">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</h2>
           </header>
           <section class="post-card-excerpt">
               
@@ -211,11 +225,91 @@ For this mini-project I will use the popular K-Means clustering algorithm to seg
 </article>
 
 
+
+
+
+
+<article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/04/market-basket-analysis-part-3-of-3/">
+      <div class="post-card-image" style="background-image: url(/img/neonbrand-SvhXD3kPSTY-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/04/market-basket-analysis-part-3-of-3/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Machine Learning 
+              #Data Product 
+              #Market Basket Analysis  </span>
+              
+              <h2 class="post-card-title">Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the THIRD and last, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+
+
+
+
+
+
+<article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/03/market-basket-analysis-part-2-of-3/">
+      <div class="post-card-image" style="background-image: url(/img/victoriano-izquierdo-JG35CpZLfVs-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/03/market-basket-analysis-part-2-of-3/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Machine Learning 
+              #Market Basket Analysis  </span>
+              
+              <h2 class="post-card-title">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the SECOND, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+
+
+
+
+
     </div>
 
     <nav class="pagination" role="navigation">
       
-      <span class="page-number"><span class="hide">Page 1 of 1</span>&nbsp;</span>
+      <span class="page-number"><span class="hide">Page 1 of 2</span>&nbsp;</span>
+      
+          <a class="older-posts" href="/page/2/"><span class="hide">Previous Posts</span> &rarr;</a>
       
     </nav>
   </div>

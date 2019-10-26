@@ -18,32 +18,37 @@
   </url>
   
   <url>
+    <loc>/categories/articles/</loc>
+    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/bootstrap/</loc>
+    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/categories/</loc>
     <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/data-cleaning/</loc>
+    <loc>/tags/clustering/</loc>
     <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/data-management/</loc>
+    <loc>/categories/customer-analytics/</loc>
     <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/data-mining/</loc>
+    <loc>/tags/customer-segmentation/</loc>
     <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/tags/data-wrangling/</loc>
-    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/data-wrangling/</loc>
     <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
@@ -58,18 +63,23 @@
   </url>
   
   <url>
-    <loc>/tags/</loc>
+    <loc>/tags/principal-component/</loc>
     <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/api/</loc>
-    <lastmod>2019-09-22T00:00:00+00:00</lastmod>
+    <loc>/categories/projects/</loc>
+    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>/tags/churn/</loc>
-    <lastmod>2019-09-22T00:00:00+00:00</lastmod>
+    <loc>/2019/09/steps-and-considerations-to-run-a-successful-segmentation/</loc>
+    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
+    <lastmod>2019-09-23T00:00:00+00:00</lastmod>
   </url>
   
   <url>
@@ -98,22 +108,7 @@
   </url>
   
   <url>
-    <loc>/2019/05/an-introduction-to-customer-segmentation/</loc>
-    <lastmod>2019-05-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/customer-segmentation/</loc>
-    <lastmod>2019-05-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/k-means-clustering/</loc>
-    <lastmod>2019-05-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/marketing-strategies/</loc>
+    <loc>/2019/05/a-gentle-introduction-to-customer-segmentation/</loc>
     <lastmod>2019-05-25T00:00:00+00:00</lastmod>
   </url>
   
@@ -123,17 +118,38 @@
   </url>
   
   <url>
-    <loc>/tags/unsupervised-learning/</loc>
-    <lastmod>2019-05-25T00:00:00+00:00</lastmod>
+    <loc>/tags/data-product/</loc>
+    <lastmod>2019-04-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/market-basket-analysis/</loc>
+    <lastmod>2019-04-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/market-basket-analysis/</loc>
+    <lastmod>2019-04-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2019/04/market-basket-analysis-part-3-of-3/</loc>
+    <lastmod>2019-04-15T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2019/03/market-basket-analysis-part-2-of-3/</loc>
+    <lastmod>2019-03-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/2019/03/market-basket-analysis-part-1-of-3/</loc>
+    <lastmod>2019-03-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/page/contact/</loc>
     <lastmod>2015-04-03T02:13:50+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/authors/</loc>
   </url>
   
 </urlset>

@@ -12,29 +12,29 @@
     
     
     <item>
-      <title>Data Cleaning</title>
-      <link>/tags/data-cleaning/</link>
+      <title>Bootstrap</title>
+      <link>/tags/bootstrap/</link>
       <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/data-cleaning/</guid>
+      <guid>/tags/bootstrap/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Data Management</title>
-      <link>/tags/data-management/</link>
+      <title>Clustering</title>
+      <link>/tags/clustering/</link>
       <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/data-management/</guid>
+      <guid>/tags/clustering/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>Data Mining</title>
-      <link>/tags/data-mining/</link>
+      <title>Customer Segmentation</title>
+      <link>/tags/customer-segmentation/</link>
       <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/data-mining/</guid>
+      <guid>/tags/customer-segmentation/</guid>
       <description></description>
     </item>
     
@@ -48,20 +48,11 @@
     </item>
     
     <item>
-      <title>API</title>
-      <link>/tags/api/</link>
-      <pubDate>Sun, 22 Sep 2019 00:00:00 +0000</pubDate>
+      <title>Principal Component</title>
+      <link>/tags/principal-component/</link>
+      <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/api/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Churn</title>
-      <link>/tags/churn/</link>
-      <pubDate>Sun, 22 Sep 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/churn/</guid>
+      <guid>/tags/principal-component/</guid>
       <description></description>
     </item>
     
@@ -93,38 +84,20 @@
     </item>
     
     <item>
-      <title>Customer Segmentation</title>
-      <link>/tags/customer-segmentation/</link>
-      <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
+      <title>Data Product</title>
+      <link>/tags/data-product/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/customer-segmentation/</guid>
+      <guid>/tags/data-product/</guid>
       <description></description>
     </item>
     
     <item>
-      <title>K Means Clustering</title>
-      <link>/tags/k-means-clustering/</link>
-      <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
+      <title>Market Basket Analysis</title>
+      <link>/tags/market-basket-analysis/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/tags/k-means-clustering/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Marketing Strategies</title>
-      <link>/tags/marketing-strategies/</link>
-      <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/marketing-strategies/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Unsupervised Learning</title>
-      <link>/tags/unsupervised-learning/</link>
-      <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>/tags/unsupervised-learning/</guid>
+      <guid>/tags/market-basket-analysis/</guid>
       <description></description>
     </item>
     

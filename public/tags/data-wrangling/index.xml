@@ -23,5 +23,16 @@ THE DATASET
 library(tidyverse)library(lubridate)library(readr)The dataset I’m using here accompanies a Redbooks publication called Building 360-Degree Information Applications which is available as a free PDF download.</description>
     </item>
     
+    <item>
+      <title>Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</title>
+      <link>/2019/03/market-basket-analysis-part-1-of-3/</link>
+      <pubDate>Wed, 13 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/03/market-basket-analysis-part-1-of-3/</guid>
+      <description>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the FIRST, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model.</description>
+    </item>
+    
   </channel>
 </rss>

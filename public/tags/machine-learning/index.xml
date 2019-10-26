@@ -22,13 +22,25 @@ parsnip is the brainchild of RStudio’s Max Khun (of caret fame) and Davis Vaug
     </item>
     
     <item>
-      <title>An Introduction to Customer Segmentation: Using K-Means Clustering to Understand Marketing Response</title>
-      <link>/2019/05/an-introduction-to-customer-segmentation/</link>
-      <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
+      <title>Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering</title>
+      <link>/2019/04/market-basket-analysis-part-3-of-3/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/05/an-introduction-to-customer-segmentation/</guid>
-      <description>Market segmentation refers to the process of dividing a consumer market of existing and/or potential customers into groups (or segments) based on shared attributes, interests, and behaviours.
-For this mini-project I will use the popular K-Means clustering algorithm to segment customers based on their response to a series of marketing campaigns. The basic concept is that consumers who share common traits would respond to marketing communication in a similar way so that companies can reach out for each group in a relevant and effective way.</description>
+      <guid>/2019/04/market-basket-analysis-part-3-of-3/</guid>
+      <description>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the THIRD and last, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model.</description>
+    </item>
+    
+    <item>
+      <title>Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</title>
+      <link>/2019/03/market-basket-analysis-part-2-of-3/</link>
+      <pubDate>Mon, 25 Mar 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/2019/03/market-basket-analysis-part-2-of-3/</guid>
+      <description>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the SECOND, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model.</description>
     </item>
     
   </channel>
