@@ -12,11 +12,11 @@
     
     
     <item>
-      <title>An Introduction to Customer Segmentation: Using K-Means Clustering to Understand Marketing Response</title>
-      <link>/2019/05/an-introduction-to-customer-segmentation/</link>
+      <title>A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</title>
+      <link>/2019/05/a-gentle-introduction-to-customer-segmentation/</link>
       <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
       
-      <guid>/2019/05/an-introduction-to-customer-segmentation/</guid>
+      <guid>/2019/05/a-gentle-introduction-to-customer-segmentation/</guid>
       <description>Market segmentation refers to the process of dividing a consumer market of existing and/or potential customers into groups (or segments) based on shared attributes, interests, and behaviours.
 For this mini-project I will use the popular K-Means clustering algorithm to segment customers based on their response to a series of marketing campaigns. The basic concept is that consumers who share common traits would respond to marketing communication in a similar way so that companies can reach out for each group in a relevant and effective way.</description>
     </item>

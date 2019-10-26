@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en-UK" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation &middot; </title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="canonical" href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/" />
+
+     <meta name="description" content="Clustering is one of my favourite analytic methods: it resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforw" /> 
+
+     
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="/img/toa-heftiba-9Xfn1rEpL0c-unsplash.jpg"/>
+    
+ 
+    <meta name="twitter:title" content="Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation"/>
+    <meta name="twitter:description" content="Clustering is one of my favourite analytic methods: it resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforw"/>
+    <meta name="twitter:url" content="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/" />
+    <meta name="twitter:site" content="@"/>
+
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation &middot; Lifelong Learning" />
+    <meta property="og:url" content="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/" />
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="Clustering is one of my favourite analytic methods: it resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforw" />
+
+    <meta property="article:published_time" content="2019-09-23T00:00:00Z" />
+    <meta property="article:tag" content="Principal Component" /><meta property="article:tag" content="Bootstrap" /><meta property="article:tag" content="Clustering" /><meta property="article:tag" content="Customer Segmentation" />
+
+    <meta property="og:image" content="/img/toa-heftiba-9Xfn1rEpL0c-unsplash.jpg"/>
+
+
+    <meta name="generator" content="Hugo 0.58.3" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="/built/screen.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/casper-two.css" /> 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
+     <link rel="stylesheet" href="/css/override.css" /> 
+
+     
+
+</head>
+
+
+<body class="post-template">
+  <div class="site-wrapper"> 
+
+<header class="site-header outer">
+  <div class="inner">
+    <nav class="site-nav">
+      <div class="site-nav-left">
+
+        <ul class="nav" role="menu">
+        
+        
+        
+            <li class="" role="menuitem">
+              <a href="/">Home</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/articles/">Articles</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/market-basket-analysis">projects</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/tags/">Tags</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/about/">About</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/contact/">Contact</a>
+            </li>
+        
+      </ul></div>
+
+      <div class="site-nav-right">
+        <div class="social-links">
+                    
+
+                    
+
+                    <a class="social-link" href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+
+                    <a class="social-link" href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 512 512"><path d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683 C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615 c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915 s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z" /></svg></a>
+
+                    <a class="social-link" href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 195 195"><path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"/></svg></a>
+        </div>  
+            
+      </div>
+
+    </nav>  
+
+  </div>
+</header>
+
+<main id="site-main" class="site-main outer" role="main">
+  <div class="inner">
+    
+      <article class="post-full post"> 
+    <header class="post-full-header">
+        <section class="post-full-meta">
+            <time class="post-full-meta-date" datetime="2019-09-23">23 September 2019</time>
+                <span class="date-divider">/</span> <a href="/tags/principal-component/">#Principal Component</a>&nbsp;<a href="/tags/bootstrap/">#Bootstrap</a>&nbsp;
+        </section>
+        <h1 class="post-full-title">Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation</h1>
+    </header>
+    
+    <figure class="post-full-image" style="background-image: url(/img/toa-heftiba-9Xfn1rEpL0c-unsplash.jpg)">
+    </figure>
+
+    <section class="post-full-content">
+        <div class="kg-card-markdown">
+        
+
+
+<p>Clustering is one of my favourite analytic methods: it resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforward concept to explain non technical audiences.</p>
+<p>Earlier this year I’ve used the popular <a href="https://en.wikipedia.org/wiki/K-means_clustering">K-Means clustering</a> algorithm to segment customers based on their response to a series of <strong>marketing campaigns</strong>. <a href="https://diegousai.io/2019/05/a-gentle-introduction-to-customer-segmentation/">For that post</a> I’ve deliberately used a basic dataset to show that it is not only a relatively easy analysis to carry out but can also help unearthing interesting patterns of behaviour in your customer base even when using few customer attributes.</p>
+<p>In this post I revisit customer segmentation using a <strong>complex and feature-rich dataset</strong> to show the practical steps you need to take and typical decisions you may face when running this type of analysis in a more realistic context.</p>
+<p><strong>BUSINESS OBJECTIVE</strong></p>
+<p>Choosing the approach to use hinges on the nature of the question/s you want to answer and the type of industry your business operates in. For this post I assume that I’m working with a client that wants to get a better understanding of their customer base, with particular emphasis to the <strong>monetary value</strong> each customer contributes to the business’ bottom line.</p>
+<p>One approach that lends itself well to this kind of analysis is the popular <a href="https://en.wikipedia.org/wiki/RFM_%28customer_value%29">RFM segmentation</a>, which takes into consideration 3 main attributes:</p>
+<ul>
+<li><code>Recency</code> – <em>How recently did the customer purchase?</em></li>
+<li><code>Frequency</code> – <em>How often do they purchase?</em></li>
+<li><code>Monetary Value</code> – <em>How much do they spend?</em></li>
+</ul>
+<p>This is a popular approach for good reasons: it’s <strong>easy to implement</strong> (you just need a transactional database with client’s orders over time), and explicitly creates sub-groups based on <strong>how much each customer is contributing</strong>.</p>
+<p><strong>Loading the libraries</strong></p>
+<pre class="r"><code>library(tidyverse)
+library(lubridate)
+library(readr)
+library(skimr)
+library(broom)
+library(fpc)
+library(scales)
+library(ggrepel)
+library(gridExtra)</code></pre>
+<p><strong>THE DATA</strong></p>
+<p>The dataset I’m using here accompanies a <a href="https://www.redbooks.ibm.com/abstracts/sg248133.html?Open">Redbooks publication</a> and is available as a free download in the <a href="ftp://www.redbooks.ibm.com/redbooks/SG248133">Additional Material</a> section. The data covers <em>3 &amp; 1/2 years</em> worth of sales <code>orders</code> for the <strong>Sample Outdoors Company</strong>, a fictitious B2B outdoor equipment retailer enterprise and comes with details about the <code>products</code> they sell as well as their customers (which in their case are <code>retailers</code> ).</p>
+<p>Here I’m simply loading up the compiled dataset but if you want to follow along I’ve also created an RMarkdown document called <a href="https://rpubs.com/DiegoUsai/530694">Loading, Merging and Joining Datasets</a> where I show how I’ve assembled the various data feeds and sorted out the likes of variable naming, new features creation and some general housekeeping tasks.</p>
+<pre class="r"><code>orders_tbl &lt;- 
+   read_rds(&quot;orders_tbl.rds&quot;)</code></pre>
+<p>You can find the full code on <a href="https://github.com/DiegoUsaiUK/Loading_Merging_and_Joining_Datasets">my Github repository</a>.</p>
+<p><strong>DATA EXPLORATION</strong></p>
+<p>This is a crucial phase of any data science project because it helps with making sense of your dataset. Here is where you get to <em>understand the relations</em> among the variables, <em>discover interesting patterns</em> within the data, and <em>detect anomalous events and outliers</em>. This is also the stage where you <em>formulate hypothesis</em> on what customer groups the segmentation may find.</p>
+<p>First, I need to create an analysis dataset, which I’m calling <code>customers_tbl</code> (<code>tbl</code> stands for <a href="https://cran.r-project.org/web/packages/tibble/vignettes/tibble.html"><strong>tibble</strong></a>, R modern take on data frames). I’m including <code>average order value</code> and <code>number of orders</code> as I want to take a look at a couple more variables beyond the RFM standard Recency, Frequency and Monetary Value.</p>
+<pre class="r"><code>customers_tbl &lt;- 
+   orders_tbl %&gt;% 
+  
+   # assume a cut-off date of 30-June-2007 and create a recency variable 
+   mutate(days_since = as.double(
+     ceiling(
+       difftime(
+          time1 = &quot;2007-06-30&quot;,
+          time2 = orders_tbl$order_date, 
+          units = &quot;days&quot;)))
+          ) %&gt;%
+   
+   # select last 2 full years 
+   filter(order_date &lt;= &quot;2007-06-30&quot;) %&gt;% 
+   
+   # create analysis variables
+   group_by(retailer_code) %&gt;%
+   summarise(
+      recency = min(days_since),
+      frequency = n(),
+      # average sales
+      avg_amount = mean(revenue),
+      # total sales
+      tot_amount = sum(revenue),
+      # number of orders
+      order_count = length(unique(order_date))
+      ) %&gt;%
+   # average order value
+   mutate(avg_order_val = tot_amount / order_count) %&gt;% 
+   ungroup()</code></pre>
+<p>As a rule of thumb, you want to ideally include a good <strong>2 to 3 year of transaction history</strong> in your segmentation (here I’m using the the full <em>3 &amp; 1/2</em> years). This ensures that you have enough variation in your data to capture a wide variety of customer types and behaviours, different purchase patterns, and outliers.</p>
+<p><strong>Outliers</strong> may represent rare occurrences of customers that have made, for instance, only a few sporadic purchases over time or placed only one or two very large orders and disappeared. Some data science practitioners prefer to exclude outliers from segmentation analysis as <em>k-means clustering</em> tends to put them in little groups of their own, which may have little descriptive power. Instead, I think it’s important to include outliers so that they can be studied to understand why they occurred and, should those customers reappear, target them with the right incentive (like <em>recommend a product</em> they’re likely to purchase, a <em>multi-buy discount</em>, or on-boarding them on a <em>loyalty scheme</em> for instance).</p>
+<p><strong>SINGLE VARIABLE EXPLORATION</strong></p>
+<p><strong>Recency</strong></p>
+<p><code>recency</code> distribution is severely right skewed, with a mean of around 29 and 50% of observations between the values of 9 and 15. This means that the bulk of customers have made their most recent purchase within the past 15 days.</p>
+<pre class="r"><code>summary(customers_tbl$recency)</code></pre>
+<p>Normally, I would expect orders to be a bit more evenly spread out over time with not so many gaps along the first part of the tail. The large amount of sales concentrated within the last 2 weeks of activity tells me that orders were “manually” added to the dataset to simulate a surge in orders.</p>
+<p><strong>NOTE</strong> that there are a few extreme outliers beyond 400, which are not shown in the chart.</p>
+<pre class="r"><code>customers_tbl %&gt;% 
+   ggplot(aes(x = recency)) +
+   geom_histogram(bins = 100, fill = &quot;#E69F00&quot;, colour = &quot;red&quot;) +
+   labs(x = &quot;&quot;, 
+        y = &quot;&quot;, 
+        title = &quot;Days since last order&quot;) + 
+   coord_cartesian(xlim = c(0, 400)) +
+   scale_x_continuous(breaks = seq(0, 400, 100)) +
+   theme_light()</code></pre>
+<p><strong>Frequency</strong></p>
+<p>The distribution is right skewed and most customers have made between 250 and just under 900 purchases, with the mean pulled above the median by the right skew.</p>
+<pre class="r"><code>summary(customers_tbl$frequency)</code></pre>
+<p>A small number of outliers can be found beyond 4,000 purchases per customer, with an extreme point beyond the 8,500 mark.</p>
+<pre class="r"><code>customers_tbl %&gt;% 
+   ggplot(aes(x = frequency)) +
+   geom_histogram(bins = 50, fill = &quot;steelblue&quot;, colour = &quot;blue&quot;) +
+   labs(x = &quot;&quot;, 
+        y = &quot;&quot;,
+        title = &quot;Purchase frequency&quot;) + 
+   coord_cartesian(xlim = c(0, 9000)) +
+   scale_x_continuous(breaks = seq(0, 9000, 1000)) +
+   theme_light()</code></pre>
+<p><strong>Total and Average Sales</strong></p>
+<p><code>total sales</code> and <code>average sales</code> are both right skewed with Total sales showing some extreme outliers at the $50m and $75m marks, whether average sales has a more continuous tail. They would both work well to capture the <em>monetary value</em> dimension for the segmentation but I personally prefer <code>average sales</code> as it softens the impact of the extreme values.</p>
+<pre class="r"><code>p1 &lt;- customers_tbl %&gt;%
+      ggplot(aes(x = tot_amount)) +
+      geom_histogram(bins = 50, fill = &quot;light green&quot;, colour = &quot;forest green&quot;) +
+      labs(x = &quot;&quot;, 
+            y = &quot;&quot;, 
+            title = &quot;Total sales per customer&quot;) +
+      scale_x_continuous(
+         labels = scales::dollar_format(scale = 1e-6,suffix = &quot;m&quot;),
+                            breaks = seq(0, 7e+7, 1e+7)) +
+      scale_y_continuous(limits = c(0,80)) +
+      theme_light() 
+
+p2 &lt;- customers_tbl %&gt;%
+      ggplot(aes(x = avg_amount)) +
+      geom_histogram(bins = 50, fill = &quot;forest green&quot;, colour = &quot;dark green&quot;) +
+      labs(x = &quot;&quot;, 
+           y = &quot;&quot;, 
+           title = &quot;Average sales per customer&quot;) +
+      scale_x_continuous(
+        labels = scales::dollar_format(scale = 1e-3, suffix = &quot;k&quot;),
+                         breaks = seq(0, 70000, 10000)) +
+      scale_y_continuous(limits = c(0, 80)) +
+      theme_light()
+
+grid.arrange(p1, p2, nrow = 2)</code></pre>
+<p><strong>Number of Orders</strong></p>
+<p>The distribution also has a right skew and the majority of retailers made between 37 and just over 100 orders in the 3 years to 30-June-2007. There are a small number of outliers with an extreme case of one retailer placing <strong>349 orders in 3 years</strong>.</p>
+<pre class="r"><code>summary(customers_tbl$order_count)</code></pre>
+<p>Number of <code>orders per customer</code> show a hint of bi-modality on the right hand side, with a peak at around 30 and another one at about 90. This suggests the potential for distinct subgroups in the data.</p>
+<pre class="r"><code>customers_tbl %&gt;%
+      ggplot(aes(x = order_count)) +
+      geom_histogram(bins = 60, fill = &quot;firebrick3&quot;, colour = &quot;sandybrown&quot;) +
+      labs(x = &quot;&quot;, 
+           y = &quot;&quot;, 
+           title = &quot;Number of Orders per Customer&quot;) +
+      scale_x_continuous(breaks = seq(0, 300, 50)) +
+      theme_light()</code></pre>
+<p><strong>Average Order Value</strong></p>
+<p>The <code>average order value</code> is of just over $105k with 50% of orders having a value between $65k and $130k and a few outliers beyond the $300k mark.</p>
+<pre class="r"><code>summary(customers_tbl$avg_order_val)</code></pre>
+<p>We also find a small amount of outliers beyond the value of $300k per order.</p>
+<pre class="r"><code>customers_tbl %&gt;%
+      ggplot(aes(x = avg_order_val)) +
+      geom_histogram(
+         bins = 50,
+         fill = &quot;purple&quot;, colour = &quot;black&quot;) +
+      labs(x = &quot;&quot;, 
+           y = &quot;&quot;,
+           title = &quot;Average Order Value&quot;) +
+      scale_x_continuous(
+         labels = scales::dollar_format(scale = 1e-3, suffix = &quot;k&quot;),
+                          breaks = seq(0, 5e+5, 1e+5)) +
+      theme_light()</code></pre>
+<p><strong>MULTIPLE VARIABLES EXPLORATION</strong></p>
+<p>Plotting 2 or 3 variable together is a great way to understand the relationship that exists amongst them and get a sense of how many clusters you may find. It’s always good to plot as many combinations as possible but here I’m only showing the most salient ones.</p>
+<p>Let’s plot the RFM trio (<code>recency</code>, <code>frequency</code> and <code>average sales</code> per customer) and use frequency to colour-code the points.</p>
+<pre class="r"><code>customers_tbl %&gt;% 
+   ggplot(aes(x = (recency), y = (avg_amount))) + 
+   geom_point(aes(colour = frequency)) + 
+   scale_colour_gradient(name = &quot;Frequency&quot;, 
+                         high = &quot;#132B43&quot;, 
+                         low = &quot;#56B1F7&quot;) +
+   scale_y_continuous(labels = scales::dollar_format(scale = 1e-3,
+                                                     suffix = &quot;k&quot;)) +
+   labs(x = &quot;Recency&quot;, 
+        y = &quot;Average Sales&quot;,
+        title = &quot;&quot;) +
+   theme_light()</code></pre>
+<p>The chart is not too easy to read with most data points being clumped on the left-hand side, which is no surprise given the severe right skew found for <code>recency</code> in the previous section. You can also notice that the large majority of points are of a paler hue of blue, denoting less frequent purchases.</p>
+<p>To make the chart more readable, it is often convenient to log-transform variables with a positive skew to spread the observations across the plot area.</p>
+<pre class="r"><code>customers_tbl %&gt;% 
+   ggplot(aes(x = log(recency), y = log(avg_amount))) + 
+   geom_point(aes(colour = log(frequency))) + 
+   scale_colour_gradient(name = &quot;Log Freq.&quot;, 
+                         high = &quot;#132B43&quot;, 
+                         low = &quot;#56B1F7&quot;) +
+   labs(x = &quot;Log Recency&quot;, 
+        y = &quot;Log Average Sales&quot;,
+        title = &quot;&quot;) +
+   theme_light()</code></pre>
+<p>Even the log scale does not help much with chart readability. Given the extreme right skew found in <code>recency</code>, I expect that the clustering algorithm may find it difficult to identify well defined groups.</p>
+<p><strong>THE ANALYSIS</strong></p>
+<p>To profile the customers I am using the <strong>K-means clustering</strong> technique: it handles large dataset very well and iterates rapidly to stable solutions.</p>
+<p>First, I need to scale the variables so that the relative difference in their magnitudes does not affect the calculations.</p>
+<pre class="r"><code>clust_data &lt;- 
+   customers_tbl %&gt;% 
+   select(-retailer_code) %&gt;% 
+   scale() %&gt;% 
+   as_tibble()</code></pre>
+<p>Then, I build a function to calculate <code>kmeans</code> for any number of centres and create a nested tibble to house all the model output.</p>
+<pre class="r"><code>kmeans_map &lt;- function(centers = centers) {
+   set.seed(1975)                   # for reproducibility
+   clust_data[,1:3] %&gt;%  
+      kmeans(centers = centers, 
+             nstart = 100, 
+             iter.max = 50)
+}
+
+# Create a nested tibble
+kmeans_map_tbl &lt;- 
+   tibble(centers = 1:10) %&gt;%       # create column with centres 
+   mutate(k_means = centers %&gt;% 
+             map(kmeans_map)) %&gt;%   # iterate `kmeans_map` row-wise to gather 
+                                    # kmeans models for each centre in column 2
+   
+   mutate(glance = k_means %&gt;%      # apply `glance()` row-wise to gather each
+             map(glance))           # model’s summary metrics in column 3</code></pre>
+<p>Last, I can build a <code>scree plot</code> and look for the “elbow”, the point where the gain of adding an extra clusters in explained <code>tot.withinss</code> starts to level off. It seems that the optimal number of clusters is <strong>4</strong>.</p>
+<pre class="r"><code>kmeans_map_tbl %&gt;% 
+   unnest(glance) %&gt;%                        # unnest the glance column
+   select(centers, tot.withinss) %&gt;%         # select centers and tot.withinss
+   
+   ggplot(aes(x = centers, y = tot.withinss)) + 
+   geom_line(colour = &#39;grey30&#39;, size = .8) +
+   geom_point(colour = &#39;green4&#39;, size = 3) +
+   geom_label_repel(aes(label = centers),
+                        colour = &#39;grey30&#39;) +
+   labs(title = &#39;Scree Plot&#39;) +
+   scale_x_continuous(breaks = seq(0, 10, 2)) +
+   theme_light()</code></pre>
+<p><strong>EVALUATING THE CLUSTERS</strong></p>
+<p>Although the algorithm has captured some distinct groups in the data, there also are some significant overlaps between clusters 1 and 2, and clusters 3 and 4.</p>
+<pre class="r"><code>kmeans_4_tbl &lt;- 
+   kmeans_map_tbl %&gt;% 
+   pull(k_means) %&gt;%
+   pluck(4) %&gt;%               # pluck element 4 
+   augment(customers_tbl)     # attach .cluster to the tibble
+
+kmeans_4_tbl %&gt;% 
+   ggplot(aes(x = log(recency), y = log(avg_amount))) + 
+   geom_point(aes(colour = .cluster)) + 
+   labs(x = &quot;Log Recency&quot;, 
+        y = &quot;Log Average Sales&quot;,
+        title = &quot;&quot;) +
+   theme_light()</code></pre>
+<p>In addition, the clusters are not particularly well balanced, with the 4th group containing nearly %80 of all <code>retailers</code>, which is of limited use for profiling your customers. Groups 1, 3 and 4 have a very similar <code>recency</code> values, with the 2nd one capturing some (but not all) of the “less recent” buyers.</p>
+<pre class="r"><code>options(digits = 2)
+
+kmeans_4_tbl %&gt;% 
+   group_by(.cluster) %&gt;% 
+   summarise(
+      Retailers = n(),
+      Recency = median(recency),
+      Frequency = median(frequency),
+      Avg.Sales = median(avg_amount)
+      ) %&gt;% 
+   ungroup() %&gt;% 
+   mutate(`Retailers(%)` = 100*Retailers / sum(Retailers)) %&gt;% 
+   arrange((.cluster)) %&gt;% 
+   select(c(1,2,6,3:5)) %&gt;% 
+   kable() </code></pre>
+<p><strong>ALTERNATIVE ANALYSIS</strong></p>
+<p>As anticipated, the algorithm is struggling to find well defined groups based on <code>recency</code>. I’m not particularly satisfied with the RFM-based profiling and believe it wise to consider a different combination of features.</p>
+<p>I’ve explored several alternatives (not included here for conciseness) and found that <code>average order value</code>, <code>orders per customer</code>and <code>average sales per customer</code> are promising candidates. Plotting them unveils a good enough feature separation, which is encouraging.</p>
+<pre class="r"><code>customers_tbl %&gt;% 
+   ggplot(aes(x = log(order_count), y = log(avg_order_val))) + 
+   geom_point(aes(colour =  log(avg_amount))) + 
+   scale_colour_gradient(name = &quot;Avg. Sales&quot;, 
+                         high = &quot;#132B43&quot;, 
+                         low = &quot;#56B1F7&quot;) +
+   labs(x = &quot;Orders per Cust.&quot;, 
+        y = &quot;Avg Order Value&quot;,
+        title = &quot;&quot;) +
+   theme_light()</code></pre>
+<p>Let’s run the customer segmentation one more time with the new variables.</p>
+<pre class="r"><code># function for a set number of centers
+kmeans_map_alt &lt;- function(centers = centers) {
+   set.seed(1975)                       # for reproducibility
+   clust_data[,4:6] %&gt;%                 # select relevant features
+      kmeans(centers = centers, 
+             nstart = 100, 
+             iter.max = 50)
+}
+
+# create nested tibble
+kmeans_map_tbl_alt &lt;- 
+   tibble(centers = 1:10) %&gt;%           # create column with centres 
+   mutate(k_means = centers %&gt;% 
+             map(kmeans_map_alt)) %&gt;%   # iterate `kmeans_map_alt` row-wise to gather 
+                                        # kmeans models for each centre in column 2
+   
+   mutate(glance = k_means %&gt;%          # apply `glance()` row-wise to gather each
+             map(glance))               # model’s summary metrics in column 3</code></pre>
+<p>Once again the optimal number of clusters should be <strong>4</strong> but the change in slope going to 5 is less pronounced than we have seen before, which may imply that the number of meaningful groups could be higher.</p>
+<pre class="r"><code>kmeans_map_tbl_alt %&gt;% 
+   unnest(glance) %&gt;%                         # unnest the glance column
+   select(centers, tot.withinss) %&gt;%         # select centers and tot.withinss
+   
+   ggplot(aes(x = centers, y = tot.withinss)) + 
+   geom_line(colour = &#39;grey30&#39;, size = .8) +
+   geom_point(colour = &#39;green4&#39;, size = 3) +
+   geom_label_repel(aes(label = centers),
+                    colour = &#39;grey30&#39;) +
+   labs(title = &#39;Scree Plot&#39;) +
+   scale_x_continuous(breaks = seq(0, 10, 2)) +
+   theme_light()</code></pre>
+<p><strong>EVALUATING THE ALTERNATIVE CLUSTERS</strong></p>
+<p>Although still present, cluster overlapping is less pronounced and the groups separation is much sharper.</p>
+<pre class="r"><code>kmeans_4_tbl_alt &lt;- 
+   kmeans_map_tbl_alt %&gt;% 
+   pull(k_means) %&gt;%
+   pluck(4) %&gt;%               # pluck element 4 
+   augment(customers_tbl)     # attach .cluster to the tibble
+
+
+kmeans_4_tbl_alt %&gt;% 
+   ggplot(aes(x = log(order_count), y = log(avg_order_val))) + 
+   geom_point(aes(colour = .cluster)) +  
+   labs(x = &quot;Number of Orders&quot;, 
+        y = &quot;Average Order Value&quot;,
+        title = &quot;Segmentation on 4 clusters&quot;) +
+   theme_light()</code></pre>
+<p>Clusters are much better defined with no one group dominating like before. Although not used in the model, I’ve added <code>recency</code> to show that even the former problem child is now more evenly balanced across groups.</p>
+<pre class="r"><code>options(digits = 2)
+
+kmeans_4_tbl_alt %&gt;%
+group_by(.cluster) %&gt;% 
+   summarise(
+      Retailer = n(),
+      Avg.Sales = median(avg_amount),
+      Orders = median(order_count),
+      Avg.Order.Val = median(avg_order_val),
+      Recency = median(recency),
+      Frequency = median(frequency)
+      ) %&gt;% 
+   ungroup() %&gt;% 
+   mutate(`Retailers(%)` = 100 * Retailer / sum(Retailer)) %&gt;% 
+   arrange((.cluster)) %&gt;% 
+   select(c(1,2,8, 3:7)) %&gt;% 
+   kable()</code></pre>
+<p>When I increase the number of clusters, the group separation remains quite neat and some noticeable overlapping reappears only with the 7-cluster configuration.</p>
+<pre class="r"><code>cl4 &lt;- kmeans_map_tbl_alt %&gt;% 
+         pull(k_means) %&gt;%
+         pluck(4) %&gt;%                        
+         augment(customers_tbl) %&gt;% 
+         ggplot(aes(x = log(order_count), y = log(avg_order_val))) + 
+         geom_point(aes(colour = .cluster)) +  
+         theme(legend.position = &quot;none&quot;) +
+         labs(x = &quot;Number of Orders&quot;, 
+              y = &quot;Avg. Order Value&quot;,
+              title = &quot;4 clusters&quot;) +
+         theme_light()
+ 
+cl5 &lt;- kmeans_map_tbl_alt %&gt;% 
+         pull(k_means) %&gt;%
+         pluck(5) %&gt;%                        
+         augment(customers_tbl) %&gt;% 
+         ggplot(aes(x = log(order_count), y = log(avg_order_val))) + 
+         geom_point(aes(colour = .cluster)) +  
+         theme(legend.position = &quot;none&quot;) +
+         labs(x = &quot;Number of Orders&quot;, 
+              y = &quot;Avg. Order Value&quot;,
+              title = &quot;5 clusters&quot;) +
+         theme_light()
+ 
+cl6 &lt;- kmeans_map_tbl_alt %&gt;% 
+         pull(k_means) %&gt;%
+         pluck(6) %&gt;%                        
+         augment(customers_tbl) %&gt;% 
+         ggplot(aes(x = log(order_count), y = log(avg_order_val))) + 
+         geom_point(aes(colour = .cluster)) + 
+         theme(legend.position = &quot;none&quot;) +
+         labs(x = &quot;Number of Orders&quot;, 
+              y = &quot;Avg. Order Value&quot;,
+              title = &quot;6 clusters&quot;) +
+         theme_light()
+ 
+cl7 &lt;- kmeans_map_tbl_alt %&gt;% 
+         pull(k_means) %&gt;%
+         pluck(7) %&gt;%                        
+         augment(customers_tbl) %&gt;% 
+         ggplot(aes(x = log(order_count), y = log(avg_order_val))) + 
+         geom_point(aes(colour = .cluster)) +  
+         theme(legend.position = &quot;none&quot;) +
+         labs(x = &quot;Number of Orders&quot;, 
+              y = &quot;Avg. Order Value&quot;,
+              title = &quot;7 clusters&quot;) +
+         theme_light()
+
+grid.arrange(cl4, cl5, cl6, cl7, nrow = 2)</code></pre>
+<p><strong>PRINCIPAL COMPONENT ANALYSIS</strong></p>
+<p>Plotting combinations of variables is a good exploratory exercise but is arbitrary in nature and may lead to mistakes and omissions, especially when you have more than just a handful of variables to consider.</p>
+<p>Thankfully we can use dimensionality reduction algorithms like <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">Principal Components Analysis</a>, or PCA for short, to visualise customer groups.</p>
+<p>One key advantage of PCA is that each PCs is orthogonal to the direction that maximises the linear variance in the data. This means that the first few PCs can capture the majority of variance in the data and is a more faithful 2 dimensional visualisation of the clusters than the variable comparisons of the plots above.</p>
+<p>To perform a <em>principal components analysis</em> I use the <code>prcomp</code> function from base R. <strong>VERY IMPORTANT:</strong> do <em>NOT</em> forget to scale and centre your data! For some reason, this is not the default!</p>
+<pre class="r"><code>pca_obj &lt;- 
+   customers_tbl[,5:7] %&gt;% 
+   prcomp(center = TRUE, 
+          scale. = TRUE)
+
+summary(pca_obj)</code></pre>
+<p>It’s a good idea to take a look at the <em>variance explained</em> by each PC. The information I need is the <strong>Proportion of Variance</strong> and is contained in the <code>importance</code> element of the <code>pca_obj</code>.</p>
+<pre class="r"><code>data.frame(summary(pca_obj)$importance) %&gt;%  # extract importance as a dataframe
+   rownames_to_column() %&gt;%                  # get metrics names in a column
+   pivot_longer(c(2:4),                         
+                names_to = &quot;PC&quot;, 
+                values_to = &quot;value&quot;) %&gt;%     # using tidyr::pivot_longer, the new gather 
+
+   filter(rowname == &#39;Proportion of Variance&#39;) %&gt;%
+   ggplot(aes(x = PC, y = value)) +
+   geom_col(aes(fill =  value)) +
+   scale_fill_gradient(high = &quot;grey5&quot;, low = &quot;grey50&quot;) +
+   scale_y_continuous(labels = scales::percent) +
+   labs(x = &quot;Principal Component&quot;, 
+        y = &quot;Percentage of Variance Explained&quot;,
+        title = &quot;Variance Explained by Principal Component&quot;)</code></pre>
+<p>The first 2 components are explaining 97% of the variation in the data, which means that using the first 2 PCs will give us a very good understanding of the data and every subsequent PC will add very little information. This is obviously more relevant when you have a larger number of variables in your dataset.</p>
+<p><strong>PCA visualisation - 4 clusters</strong></p>
+<p>First, I extract the PCA from <code>pca_obj</code> and join the PCs co-ordinate contained in the element <code>x</code> with the <code>retailer</code> information from the original <code>customer_tbl</code> set.</p>
+<pre class="r"><code>pca_tbl &lt;- 
+   pca_obj$x %&gt;%                 # extract &quot;x&quot;, which contains the PCs co-ordinates
+   as_tibble() %&gt;%               # change to a tibble
+   bind_cols(customers_tbl %&gt;%   # append retailer_code, my primary key
+                select(retailer_code))</code></pre>
+<p>Then, I <code>pluck</code> the 4th element from <code>kmeans_map_tbl_alt</code>, attach the cluster info to it, and <code>left_join</code> by retailer_code so that I have all information I need in one tibble, ready for plotting.</p>
+<pre class="r"><code>km_pca_4_tbl &lt;- 
+   kmeans_map_tbl_alt %&gt;% 
+   pull(k_means) %&gt;%
+   pluck(4) %&gt;%                  # pluck element 4 
+   augment(customers_tbl) %&gt;%    # attach .cluster to the tibble 
+   left_join(pca_tbl,            # left_join by my primary key, retailer_code 
+             by = &#39;retailer_code&#39;)
+
+km_pca_4_tbl %&gt;% 
+   ggplot(aes(x = PC1, y = PC2, colour = .cluster)) +
+   geom_point(aes(shape = .cluster)) +
+   labs(title    = &#39;K-Means 4 Clusters Against First Two Principal Components&#39;,
+        caption  = &quot;&quot;) +
+   theme(legend.position = &#39;none&#39;) +
+   theme_light()</code></pre>
+<p>The chart confirms that the segments are well separated in the 4-cluster configuration. Segments 1 and 3 show significant variability in different directions and there is a degree of overlapping between segments 2 and 4.</p>
+<pre class="r"><code>options(digits = 2)
+
+kmeans_map_tbl_alt %&gt;% 
+   pull(k_means) %&gt;%
+   pluck(4) %&gt;%                        
+   augment(customers_tbl) %&gt;%
+   group_by(.cluster) %&gt;% 
+   summarise(
+      Retailers = n(),
+      Avg.Sales = median(avg_amount),
+      Orders = median(order_count),
+      Avg.Order.Val = median(avg_order_val),
+      `Tot.Sales(m)` = sum(tot_amount/1e+6)
+      ) %&gt;% 
+   ungroup() %&gt;% 
+   mutate(`Tot.Sales(%)` = 100 * `Tot.Sales(m)` / sum(`Tot.Sales(m)`),
+          `Retailers(%)` = 100*Retailers / sum(Retailers))  %&gt;% 
+   select(c(1, 2, 8, 3:7)) %&gt;%
+   kable()</code></pre>
+<p><strong>Group 1</strong> includes customers who placed a small number of very high-value orders. Although they represent only 6% of overall total sales, encouraging them to place even a slightly higher number of orders could result in a big increase in your bottom line.</p>
+<p><strong>Group 2</strong> is the “low order value” / “low number of orders” segment. However, as it accounts for almost 40% of the customer base, I’d incentivise them to increase either their order value or number of orders.</p>
+<p><strong>Group 3 </strong> is a relatively small segment (11% of total <code>retailers</code>) but have placed a <em>very high number of mid-to-high value orders</em>. These are some of your <strong>most valuable customers</strong> and account for nearly 40% of total sales. I would want to keep them very happy and engaged.</p>
+<p><strong>Group 4 </strong> is where <strong>good opportunities</strong> may lay! This is the largest group in terms of both number of retailers (45%) and contribution to total sales (44%). I would try to motivate them to move to <strong>Group 1</strong> or <strong>Group 3</strong>.</p>
+<p><strong>PCA visualisation - 6 clusters</strong></p>
+<p><strong>IMPORTANT NOTE</strong>: the cluster numbering is randomly generated so group names do not match with those in the previous section.</p>
+<p>Let’s now see if adding extra clusters reveals some hidden dynamics and help us fine tune this profiling exercise. Here I’m only showing the 6-cluster configuration, which is the most promising.</p>
+<pre class="r"><code>options(digits = 2)
+
+kmeans_6_tbl &lt;- 
+   kmeans_map_tbl_alt %&gt;% 
+   pull(k_means) %&gt;%
+   pluck(6) %&gt;%                  # pluck element 6 
+   augment(customers_tbl) %&gt;%    # attach .cluster to the tibble 
+   left_join(pca_tbl,            # left_join by retailer_code
+             by = &#39;retailer_code&#39;)
+
+kmeans_6_tbl %&gt;% 
+   
+   ggplot(aes(x = PC1, y = PC2, colour = .cluster)) +
+   geom_point(aes(shape = .cluster)) +
+   labs(title    = &#39;K-Means 6 Clusters Against First Two Principal Components&#39;,
+        caption  = &quot;&quot;) +
+   theme(legend.position = &#39;none&#39;) +
+   theme_light()</code></pre>
+<p>The 6-segment set up broadly confirms the groups structure and separation found in the 4-split solution, showing good clusters stability. Former segments 1 and 3 further split out to create 2 <em>“mid-of-the-range”</em> groups, each ‘borrowing’ from former segments 2 and 4.</p>
+<pre class="r"><code>options(digits = 2)
+
+kmeans_map_tbl_alt %&gt;% 
+   pull(k_means) %&gt;%
+   pluck(6) %&gt;%                        
+   augment(customers_tbl) %&gt;%
+   group_by(.cluster) %&gt;% 
+   summarise(
+      Retailers = n(),
+      Avg.Sales = median(avg_amount),
+      Orders = median(order_count),
+      Avg.Order.Val = median(avg_order_val),
+      `Tot.Sales(m)` = sum(tot_amount/1e+6)
+      ) %&gt;% 
+   ungroup() %&gt;% 
+   mutate(`Tot.Sales(%)` = 100 * `Tot.Sales(m)` / sum(`Tot.Sales(m)`),
+          `Retailers(%)` = 100*Retailers / sum(Retailers))  %&gt;% 
+   select(c(1, 2, 8, 3:7)) %&gt;%
+   kable()</code></pre>
+<p>The new <em>“mid-of-the-range”</em> groups have specific characteristics:</p>
+<ul>
+<li><p>Customers in <strong>New Group 1</strong> are placing a <em>high number of orders</em> of <em>mid-to-high value</em> and contribute some 18% to <em>Total Sales</em>.</p>
+<ul>
+<li><strong>STRATEGY TO TEST</strong>: as they’re already placing frequent orders, we may offer them incentives to <strong>increase their order value</strong>.</li>
+</ul></li>
+<li><p>On the other hand, <strong>New Group 3</strong> customers are purchasing <em>less frequently</em> and have a similar <em>mid-to-high order value</em> and account for some 16% to <em>total customers</em>.</p>
+<ul>
+<li><strong>STRATEGY TO TEST</strong>: in this case the incentive could be focused on <strong>boosting the number of orders</strong>.</li>
+</ul></li>
+</ul>
+<p>Better defined clusters represent <strong>greater potential opportunities</strong>: it makes it easier to testing different strategies, learn what really resonates with each group and connect with them using the right incentive.</p>
+<p><strong>CLUSTERBOOT EVALUATION</strong></p>
+<p>One last step worth taking is verifying how ‘genuine’ your clusters are by validating whether they capture non-random structure in the data. This is particularly important with <strong>k-means clustering</strong> because the analyst has to specify the number of clusters in advance.</p>
+<p>The <strong>clusterboot algorithm</strong> uses bootstrap resampling to evaluate how stable a given cluster is to perturbations in the data. The cluster’s stability is assessed by measuring the similarity between sets of a given number of number of resampling runs.</p>
+<pre class="r"><code>kmeans_boot100 &lt;-
+   clusterboot(
+      clust_data[,4:6],
+      B = 50,                    # number of resampling runs
+      bootmethod = &quot;boot&quot;,       # resampling method: nonparametric bootstrap
+      clustermethod = kmeansCBI, # clustering method: k-means 
+      k = 7,                     # number of clusters 
+      seed = 1975)               # for reproducibility
+
+
+bootMean_df &lt;- 
+   data.frame(cluster = 1:7, 
+              bootMeans = kmeans_boot100$bootmean)</code></pre>
+<p>To interpret the results, I visualise the tests output with a simple chart.</p>
+<p>Remember that values:</p>
+<ul>
+<li><strong>above 0.8</strong> (segment 2, 3 and 5) indicates highly stable clusters</li>
+<li><strong>between 0.6 and 0.75</strong> (segments 1, 4 and 6) signal a acceptable degree of stability</li>
+<li><strong>below 0.6</strong> (segment 7) should be considered unstable</li>
+</ul>
+<p>Hence, the 6-cluster configuration is overall considerably stable.</p>
+<pre class="r"><code>bootMean_df %&gt;%
+    ggplot(aes(x = cluster, y = bootMeans)) +
+    geom_point(colour = &#39;green4&#39;, size = 4) +
+    geom_hline(yintercept = c(0.6, 0.8)) +
+    theme_light() +
+    labs(x = &quot;Cluster&quot;,
+         title = &quot;Clusterboot Stability Evaluation&quot;) +
+    theme(legend.position = &quot;none&quot;)</code></pre>
+<p><strong>CLOSING THOUGHTS</strong></p>
+<p>In this post I’ve used a feature-rich dataset to run through the practical steps you need to take and considerations you may face when running a customer profiling analysis. I’ve used the <strong>K-means clustering</strong> technique on a range of different customer attributes to look for potential sub-groups in the customer base, visually examined the clusters with <strong>Principal Components Analysis</strong>, and validated the cluster’s stability with <strong>clusterboot</strong> from the <code>fpc</code> package.</p>
+<p>This analysis should provide a solid base for discussion with relevant business stakeholders. Normally I would present my client with a variety of customer profiles based on different combinations of customer features and formulate my own data-driven recommendations. However, it is ultimately down to them to decide how many groups they want settle for and what characteristics each segment should have.</p>
+<p><strong>Conclusions</strong></p>
+<p>Statistical clustering is very easy to implement and can identify natural occurring patterns of behaviour in your customer base. However, it has some limitations that should always be kept in mind in a commercial setting. First and foremost, it is a <strong>snapshot in time</strong> and just like a picture it only represents the moment it was taken.</p>
+<p>For that reason it should be <strong>periodically re-evaluated</strong> because:</p>
+<ul>
+<li><p>it may capture <strong>seasonal effects</strong> that do not necessarily apply at different periods in time</p></li>
+<li><p><strong>new customers</strong> can enter your customer base, changing the make up of each group</p></li>
+<li><p>customers <strong>purchase patterns evolve</strong> over time and so should your customer profiling</p></li>
+</ul>
+<p>Nonetheless, statistical segmentation remains a powerful and useful exploratory exercise to finding groups within your consumer data. It also resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforward concept to explain non technical audiences.</p>
+<p><strong>Code Repository</strong></p>
+<p>The full R code can be found on <a href="https://github.com/DiegoUsaiUK/Customer_Analytics/tree/master/RFM_Segmentation">my GitHub profile</a></p>
+<p><strong>References</strong></p>
+<ul>
+<li>For a broader discussion on <a href="https://www.insanegrowth.com/customer-segmentation/">the benefits of customer segmentation</a></li>
+<li>For a visual introduction to <a href="http://setosa.io/ev/principal-component-analysis/">Principal Components Analysis</a></li>
+<li>For an application of <a href="https://www.r-bloggers.com/bootstrap-evaluation-of-clusters/">clusterboot algorithm</a></li>
+<li>For a critique of some of <a href="https://www.datascience.com/blog/k-means-alternatives">k-means drawback</a></li>
+</ul>
+    
+        </div>
+    </section>
+
+    <footer class="post-full-footer">
+      <section class="author-card">
+        <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+        <section class="author-card-content">
+            <h4 class="author-card-name"><a href="/">Diego Usai</a></h4>
+                <p></p>
+        </section>
+      </section>
+    </footer>
+</article>
+    
+    
+    
+
+  </div>
+</main>
+
+
+<aside class="read-next outer">
+  <div class="inner">
+    <div class="read-next-feed">      
+      
+<article class="read-next-card" 
+            style="background-image: url(/img/simon-zhu-TfRHSL2GKDc-unsplash.jpg);" >
+    <header class="read-next-card-header">
+        <small class="read-next-card-header-sitetitle">&mdash; Lifelong Learning &mdash;</small>
+        
+        <h3 class="read-next-card-header-title"><a href="/tags/principal-component/">#Principal Component</a></h3>
+    </header>
+    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+    </div>
+
+    <div class="read-next-card-content">
+      
+        <ul>
+          <li><a href="/2019/09/modelling-with-tidymodels-and-parsnip/">Modelling with Tidymodels and Parsnip - A Tidy Approach to a Classification Problem</a></li>            
+        
+          <li><a href="/2019/03/market-basket-analysis-part-2-of-3/">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</a></li>            
+        
+          <li><a href="/2019/09/loading-merging-and-joining-datasets/">Loading, Merging and Joining Datasets</a></li>            
+        
+                      
+        
+          <li><a href="/2019/03/market-basket-analysis-part-1-of-3/">Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</a></li>            
+        </ul>
+    </div>
+    <footer class="read-next-card-footer">
+      
+        <a href="/tags/principal-component/">See all related posts →</a>
+    </footer>
+</article>
+
+
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/09/loading-merging-and-joining-datasets/">
+      <div class="post-card-image" style="background-image: url(/img/stefan-kunze-v8SjXTTI0GA-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/09/loading-merging-and-joining-datasets/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Data Wrangling  </span>
+              
+              <h2 class="post-card-title">Loading, Merging and Joining Datasets</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>This is the minimal coding necessary to assemble various data feeds and sort out the likes of variables naming &amp; new features creation plus some general housekeeping tasks. It includes general housekeeping tasks like sorting variables names, creating essential features and sorting out variables order
+I will continue to add to this code should the need arise for other features to be created.
+THE DATASET
+library(tidyverse)library(lubridate)library(readr)The dataset I’m using here accompanies a Redbooks publication called Building 360-Degree Information Applications which is available as a free PDF download. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/09/modelling-with-tidymodels-and-parsnip/">
+      <div class="post-card-image" style="background-image: url(/img/karim-ghantous-vIZGAYbOl30-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/09/modelling-with-tidymodels-and-parsnip/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Machine Learning 
+              #Tidyverse 
+              #Classification  </span>
+              
+              <h2 class="post-card-title">Modelling with Tidymodels and Parsnip - A Tidy Approach to a Classification Problem</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>Recently I have completed the online course Business Analysis With R focused on applied data and business science with R, which introduced me to a couple of new modelling concepts and approaches. One that especially captured my attention is parsnip and its attempt to implement a unified modelling and analysis interface (similar to python’s scikit-learn) to seamlessly access several modelling platforms in R.
+parsnip is the brainchild of RStudio’s Max Khun (of caret fame) and Davis Vaughan and forms part of tidymodels, a growing ensemble of tools to explore and iterate modelling tasks that shares a common philosophy (and a few libraries) with the tidyverse. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+    </div>
+  </div>
+</aside>
+
+<div class="floating-header">
+  <div class="floating-header-logo">
+    <a href="/">
+      
+      <span></span>
+    </a>
+  </div>
+  <span class="floating-header-divider">&mdash;</span>
+  <div class="floating-header-title">Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation</div>
+  <div class="floating-header-share">
+    <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/></svg>
+    </div>
+    
+    <a class="floating-header-share-tw" href="https://twitter.com/share?text=Steps%20and%20considerations%20to%20run%20a%20successful%20segmentation%20with%20K-means%2c%20Principal%20Components%20Analysis%20and%20Bootstrap%20Evaluation&amp;url=%2f2019%2f09%2fsteps-and-considerations-to-run-a-successful-segmentation%2f"
+          onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+      </a>
+      <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=%2f2019%2f09%2fsteps-and-considerations-to-run-a-successful-segmentation%2f"
+          onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+      </a>
+  </div>
+
+  <progress class="progress" value="0">
+    <div class="progress-container">
+      <span class="progress-bar"></span>
+    </div>
+  </progress>
+</div>
+
+
+
+<footer class="site-footer outer">
+  <div class="site-footer-content inner">
+    <section class="copyright" style="line-height: 1.3em;">
+      <a href="/">Diego Usai</a> © 2019 <br>
+      <span style="font-size: 0.8em; color: #555;">Hugo port of <a href="https://github.com/TryGhost/Casper">Casper 2.1.7</a> by <a href="https://www.telematika.org">EM</a></span>
+    </section>
+    <nav class="site-footer-nav">
+        <a href="/">Latest Posts</a>
+        
+        
+        <a href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener">Github</a>
+        <a href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener">Medium</a>
+    </nav>  
+  </div>
+</footer>
+
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    <script>
+
+
+
+
+
+$(document).ready(function () {
+    
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+</body></html>

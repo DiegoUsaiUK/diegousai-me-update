@@ -12,11 +12,29 @@
     
     
     <item>
-      <title>Data Wrangling</title>
-      <link>/categories/data-wrangling/</link>
+      <title>Articles</title>
+      <link>/categories/articles/</link>
       <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>/categories/data-wrangling/</guid>
+      <guid>/categories/articles/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Customer Analytics</title>
+      <link>/categories/customer-analytics/</link>
+      <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/customer-analytics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/categories/projects/</link>
+      <pubDate>Mon, 23 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/projects/</guid>
       <description></description>
     </item>
     
@@ -35,6 +53,15 @@
       <pubDate>Sat, 25 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/categories/ml-methods/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Market Basket Analysis</title>
+      <link>/categories/market-basket-analysis/</link>
+      <pubDate>Mon, 15 Apr 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/categories/market-basket-analysis/</guid>
       <description></description>
     </item>
     

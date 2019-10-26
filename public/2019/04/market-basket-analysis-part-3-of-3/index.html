@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en-UK" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering &middot; </title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="canonical" href="/2019/04/market-basket-analysis-part-3-of-3/" />
+
+     <meta name="description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of" /> 
+
+     
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="/img/neonbrand-SvhXD3kPSTY-unsplash.jpg"/>
+    
+ 
+    <meta name="twitter:title" content="Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering"/>
+    <meta name="twitter:description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of"/>
+    <meta name="twitter:url" content="/2019/04/market-basket-analysis-part-3-of-3/" />
+    <meta name="twitter:site" content="@"/>
+
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering &middot; Lifelong Learning" />
+    <meta property="og:url" content="/2019/04/market-basket-analysis-part-3-of-3/" />
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of" />
+
+    <meta property="article:published_time" content="2019-04-15T00:00:00Z" />
+    <meta property="article:tag" content="Machine Learning" /><meta property="article:tag" content="Data Product" /><meta property="article:tag" content="Market Basket Analysis" />
+
+    <meta property="og:image" content="/img/neonbrand-SvhXD3kPSTY-unsplash.jpg"/>
+
+
+    <meta name="generator" content="Hugo 0.58.3" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="/built/screen.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/casper-two.css" /> 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
+     <link rel="stylesheet" href="/css/override.css" /> 
+
+     
+
+</head>
+
+
+<body class="post-template">
+  <div class="site-wrapper"> 
+
+<header class="site-header outer">
+  <div class="inner">
+    <nav class="site-nav">
+      <div class="site-nav-left">
+
+        <ul class="nav" role="menu">
+        
+        
+        
+            <li class="" role="menuitem">
+              <a href="/">Home</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/articles/">Articles</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/market-basket-analysis">projects</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/tags/">Tags</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/about/">About</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/contact/">Contact</a>
+            </li>
+        
+      </ul></div>
+
+      <div class="site-nav-right">
+        <div class="social-links">
+                    
+
+                    
+
+                    <a class="social-link" href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+
+                    <a class="social-link" href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 512 512"><path d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683 C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615 c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915 s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z" /></svg></a>
+
+                    <a class="social-link" href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 195 195"><path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"/></svg></a>
+        </div>  
+            
+      </div>
+
+    </nav>  
+
+  </div>
+</header>
+
+<main id="site-main" class="site-main outer" role="main">
+  <div class="inner">
+    
+      <article class="post-full post"> 
+    <header class="post-full-header">
+        <section class="post-full-meta">
+            <time class="post-full-meta-date" datetime="2019-04-15">15 April 2019</time>
+                <span class="date-divider">/</span> <a href="/tags/machine-learning/">#Machine Learning</a>&nbsp;<a href="/tags/data-product/">#Data Product</a>&nbsp;
+        </section>
+        <h1 class="post-full-title">Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering</h1>
+    </header>
+    
+    <figure class="post-full-image" style="background-image: url(/img/neonbrand-SvhXD3kPSTY-unsplash.jpg)">
+    </figure>
+
+    <section class="post-full-content">
+        <div class="kg-card-markdown">
+        
+
+
+<p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into <strong>three parts</strong>, of which this is the <strong>THIRD</strong> and last, that I have organised as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>In the <a href="https://diegousai.io/2019/03/market-basket-analysis-part-1-of-3"><strong>first</strong></a> chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.</p></li>
+<li><p>For the <a href="https://diegousai.io/2019/03/market-basket-analysis-part-2-of-3"><strong>second</strong></a> part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. This will be done with the support of the <strong>recommenderlab</strong> package.</p></li>
+<li><p>In the <a href="https://diegousai.io/2019/04/market-basket-analysis-part-3-of-3"><strong>third</strong></a> and final instalment, I will implement the selected model in a <a href="https://diegousai.shinyapps.io/Product_Recommender/"><strong>Shiny Web Application</strong></a>.</p></li>
+</ol>
+<p><strong>INTRODUCTION</strong></p>
+<p>In the course of the research I carried out for this project I came across several pieces of work, all of which provided great inspiration and insight for my Shiny Application. A special mention goes to <em>Jekaterina Novikova, PhD</em> for her <a href="https://jeknov.shinyapps.io/movieRec"><strong>Movie Recommender System</strong></a> , and <em>Prof. Michael Hahsler</em>, who created a <a href="https://mhahsler-apps.shinyapps.io/Jester/"><strong>Joke Recommender</strong></a>. They used the <code>MovieLens</code> and the <code>Jester</code> dataset respectively, which come as default with <strong>recommenderlab</strong>.</p>
+<p>However, both authors employed <strong>recommenderlab</strong> as the engine for their Shiny App, which famously requires a long time to calculate predictions on large datasets. The solution adopted by <em>Jekaterina</em> to make calculations more manageable was to take a sample of the dataset to reduce the size of the rating matrix. However, this may prove detrimental to prediction accuracy.</p>
+<p>Fortunately, I came across this brilliant <strong><a href="https://www.kaggle.com/philippsp/book-recommender-collaborative-filtering-shiny">Kaggle kernel</a></strong> by <em>Philipp Spachtholz</em>, who not only carried out a salient analysis on a non-Kaggle dataset but, crucially for me, also build a Shiny-based <a href="https://philippsp.shinyapps.io/BookRecommendation/"><strong>Book Recommender</strong></a> system using a much faster collaborative filtering code.</p>
+<p><em>Philipp</em> drew his inspiration from this <a href="https://www.smartcat.io/blog/2017/improved-r-implementation-of-collaborative-filtering/">blog-post</a> by <a href="https://www.smartcat.io/"><strong>SmartCat Consulting</strong></a>, which describes how to use an Improved Collaborative Filtering code and all the associated functions contained in the companion <a href="https://github.com/smartcat-labs/collaboratory">Github</a> repository. In particular, the repository includes the <code>simililarity_measures.R</code> functions for calculating similarity matrices, and the <code>cf_algorithm.R</code> file with the collaborative filtering algorithm and prediction function.</p>
+<p>In this final part of the project, I will describe how I used these functions in my Shiny implementation.</p>
+<p><strong>Loading the Packages</strong></p>
+<pre class="r"><code>library(tidyverse)            
+library(knitr)
+library(Matrix)
+library(recommenderlab)</code></pre>
+<p><strong>THE DATA</strong></p>
+<p>In this section I am using the <code>retail</code> dataset from <a href="https://https://diegousai.io/2019/03/market-basket-analysis-part-2-of-3"><strong>Part 2</strong></a> to prepare the data files needed for the Shiny App. <strong>Note</strong> that in Part 2 I have carried out the extra formatting step of removing those orders that contained the same item more than once.</p>
+<pre class="r"><code>glimpse(retail)</code></pre>
+<p>For the app deployment I need to create 2 data files: <code>past_orders_matrix</code> and <code>item_list</code>.</p>
+<p><code>past_orders_matrix</code> is a user-item sparse matrix containing the history of past orders. This is needed in the Shiny <code>server.R</code> file for all the calculations.</p>
+<pre class="r"><code>past_orders_matrix &lt;- 
+    retail %&gt;%
+    # Select only needed variables
+    select(InvoiceNo, Description) %&gt;% 
+    # Add a column of 1s
+    mutate(value = 1) %&gt;%
+    # Spread into user-item format
+    spread(Description, value, fill = 0) %&gt;%
+    select(-InvoiceNo) %&gt;% 
+    # Convert to matrix
+    as.matrix() %&gt;% 
+    # Convert to class &quot;dgCMatrix&quot;
+    as(&quot;dgCMatrix&quot;)</code></pre>
+<p>I save the file for use in the app.</p>
+<pre class="r"><code>saveRDS(past_orders_matrix, 
+        file = &quot;past_orders_matrix.rds&quot;)</code></pre>
+<p><code>item_list</code> is a list of all the products available to purchase. This will feed in the Shiny <code>ui.R</code> file to make the products list available for selection.</p>
+<pre class="r"><code># Creating a unique items list
+item_list &lt;- retail %&gt;% 
+    select(Description) %&gt;% 
+    unique()</code></pre>
+<p>I save the list for use in the app.</p>
+<pre class="r"><code>saveRDS(item_list, 
+        file = &quot;item_list.rds&quot;)</code></pre>
+<p><strong>IMPROVED COLLABORATIVE FILTERING</strong>
+To show how the <code>Improved Collaborative Filtering</code> works, I am fitting the best performing model found in <a href="https://https://diegousai.io/2019/03/market-basket-analysis-part-2-of-3"><strong>Part 2</strong></a>, the <code>item-based CF</code>, on the same made-up order. I am also doing the same using <code>recommenderlab</code> to compare the performance of the two approaches.</p>
+<p>First, I re-create the made-up order using the same 6 randomly selected products.</p>
+<pre class="r"><code>customer_order &lt;- c(&quot;GREEN REGENCY TEACUP AND SAUCER&quot;,
+                     &quot;SET OF 3 BUTTERFLY COOKIE CUTTERS&quot;,
+                     &quot;JAM MAKING SET WITH JARS&quot;,
+                     &quot;SET OF TEA COFFEE SUGAR TINS PANTRY&quot;,
+                     &quot;SET OF 4 PANTRY JELLY MOULDS&quot;)</code></pre>
+<p>Next, I to put <code>new_order</code> in a user_item matrix format.</p>
+<pre class="r"><code># put in a matrix format
+new_order &lt;- item_list %&gt;%
+    # Add a &#39;value&#39; column with 1&#39;s for customer order items
+    mutate(value = as.numeric(Description %in% customer_order)) %&gt;%
+    # Spread into sparse matrix format
+    spread(key = Description, value = value) %&gt;%
+    # Change to a matrix
+    as.matrix() %&gt;% 
+    # Convert to class &quot;dgCMatrix&quot;
+    as(&quot;dgCMatrix&quot;)</code></pre>
+<p>Then, I add the <code>new_order</code> to the <code>past_orders_matrix</code> as its first entry.</p>
+<pre class="r"><code># binding 2 matrices
+all_orders_dgc &lt;- t(rbind(new_order, past_orders_matrix))</code></pre>
+<p>Now, I need to set a number of parameters required by the Improved CF to work.</p>
+<pre class="r"><code># Set range of items to calculate predictions for - here I select them all
+items_to_predict &lt;- 1:nrow(all_orders_dgc)
+# Set current user to 1, which corresponds to new_order
+users &lt;- c(1)
+# Set prediction indices
+prediction_indices &lt;- as.matrix(expand.grid(items_to_predict, users = users))</code></pre>
+<p>I load the algorithm implementations and similarity calculations.</p>
+<pre class="r"><code># Load algorithm implementations and similarity calculations
+source(&quot;cf_algorithm.R&quot;)
+source(&quot;similarity_measures.R&quot;)</code></pre>
+<p>And finally I can fit the <code>item-based CF</code> model with the <code>Improved CF</code> and check the runtime.</p>
+<pre class="r"><code>start &lt;- Sys.time()
+recomm &lt;- predict_cf(all_orders_dgc, prediction_indices,
+                     &quot;ibcf&quot;, FALSE, cal_cos, 3, FALSE, 4000, 2000)
+end &lt;- Sys.time()
+cat(&#39;runtime&#39;, end - start)</code></pre>
+<p>Wow! That was lightning fast!</p>
+<p>Let’s now run the <code>item-based CF</code> model with recommenderlab and compare performances.</p>
+<pre class="r"><code># Convert `all_orders` to class &quot;binaryRatingMatrix&quot;
+# signature(from = &quot;dgTMatrix&quot;, to = &quot;realRatingMatrix&quot;)
+
+all_orders_brm &lt;- as(all_orders_dgc, &quot;realRatingMatrix&quot;)
+
+# Run run IBCF model on recommenderlab
+start &lt;- Sys.time()
+recomm &lt;- Recommender(all_orders_brm, 
+                      method = &quot;IBCF&quot;,  
+                      param = list(k = 5))
+end &lt;- Sys.time()
+cat(&#39;runtime&#39;, end - start)</code></pre>
+<p>The speed gain is around 20 times and is consistent with what <em>Philipp Spachtholz</em> witnessed in his work. This is rather promising for the Shiny App!</p>
+<p><strong>DEPLOYING THE APP</strong></p>
+<p>For the App deployment I went for a <a href="https://en.wikipedia.org/wiki/Proof_of_concept"><em>Proof of Concept</em></a> approach. My focus has been on speed of execution and on getting right all the calculations shown in this article to power the <code>server</code> side of the App. This reflects on what is currently a minimalistic User Interface, which simply features product selection and a <em>Complete Your Purchase</em> action button.</p>
+<p>Here’s a link to the <a href="https://diegousai.shinyapps.io/Product_Recommender/"><strong>Product Recommender</strong></a> for your peruse.</p>
+<p>I will continue to work on the User Interface to add features that improve customer experience and make it more of a final product.</p>
+<p>Here are a few ideas I’m toying with at the moment:</p>
+<ol style="list-style-type: decimal">
+<li>Add <strong>Product Price</strong> and ability to select <strong>Product Quantity</strong></li>
+<li>Add <strong>Product Image</strong> - with 4,000 items to choose from, this is a mini project in its own right!</li>
+<li>Ability to select item from list using <strong>first letter of Product Name</strong></li>
+<li>Enhance the UI visuals with <code>shinyjs</code> and/or <code>htlm</code></li>
+<li>Research how to Implement a Hybrid approach, given that not all combinations of products currently return a suggestion</li>
+</ol>
+<p><strong>Comments</strong></p>
+<p>I have to admit that I’ve genuinely enjoyed working on this Market Basket Analysis project. Recommendation systems are a fascinating field of research with <em>real-world</em> applications and I feel that I’ve just scratched the surface.</p>
+<p>I have also really appreciated learning the ropes of Shiny App development, which turned out to be more straightforward that I initially thought: reactivity is a key concept to get your head around and it forces you to think in terms of User Interface and Server being two sides of the same coin.</p>
+<p>The main consideration for me is that <strong>the potential is massive</strong>: even small companies with an online presence can benefit from implementing the most basic of recommendation system. With only a few lines of code one can improve customer experience, promote customer loyalty and boost sales.</p>
+<p><strong>Code Repository</strong></p>
+<p>The full R code can be found on <a href="https://github.com/DiegoUsaiUK/Market_Basket_Analysis">my GitHub profile</a></p>
+<p><strong>References</strong>
+* For Recommenderlab Package see: <a href="https://cran.r-project.org/package=recommenderlab">https://cran.r-project.org/package=recommenderlab</a>
+* For Recommenderlab Package Vignette see: <a href="https://cran.r-project.org/web/packages/recommenderlab/vignettes/recommenderlab.pdf">https://cran.r-project.org/web/packages/recommenderlab/vignettes/recommenderlab.pdf</a>
+* For the SmartCat Improved Collaborative Filter see: <a href="https://www.smartcat.io/blog/2017/improved-r-implementation-of-collaborative-filtering/">https://www.smartcat.io/blog/2017/improved-r-implementation-of-collaborative-filtering/</a></p>
+    
+        </div>
+    </section>
+
+    <footer class="post-full-footer">
+      <section class="author-card">
+        <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+        <section class="author-card-content">
+            <h4 class="author-card-name"><a href="/">Diego Usai</a></h4>
+                <p></p>
+        </section>
+      </section>
+    </footer>
+</article>
+    
+    
+    
+
+  </div>
+</main>
+
+
+<aside class="read-next outer">
+  <div class="inner">
+    <div class="read-next-feed">      
+      
+<article class="read-next-card" 
+            style="background-image: url(/img/simon-zhu-TfRHSL2GKDc-unsplash.jpg);" >
+    <header class="read-next-card-header">
+        <small class="read-next-card-header-sitetitle">&mdash; Lifelong Learning &mdash;</small>
+        
+        <h3 class="read-next-card-header-title"><a href="/tags/machine-learning/">#Machine Learning</a></h3>
+    </header>
+    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+    </div>
+
+    <div class="read-next-card-content">
+      
+        <ul>
+                      
+        
+          <li><a href="/2019/03/market-basket-analysis-part-2-of-3/">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</a></li>            
+        
+          <li><a href="/2019/09/loading-merging-and-joining-datasets/">Loading, Merging and Joining Datasets</a></li>            
+        
+          <li><a href="/2019/03/market-basket-analysis-part-1-of-3/">Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</a></li>            
+        
+          <li><a href="/2019/05/a-gentle-introduction-to-customer-segmentation/">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</a></li>            
+        </ul>
+    </div>
+    <footer class="read-next-card-footer">
+      
+        <a href="/tags/machine-learning/">See all related posts →</a>
+    </footer>
+</article>
+
+
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/05/a-gentle-introduction-to-customer-segmentation/">
+      <div class="post-card-image" style="background-image: url(/img/nick-karvounis-SWIoVDRZWUY-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/05/a-gentle-introduction-to-customer-segmentation/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Clustering 
+              #Customer Segmentation  </span>
+              
+              <h2 class="post-card-title">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>Market segmentation refers to the process of dividing a consumer market of existing and/or potential customers into groups (or segments) based on shared attributes, interests, and behaviours.
+For this mini-project I will use the popular K-Means clustering algorithm to segment customers based on their response to a series of marketing campaigns. The basic concept is that consumers who share common traits would respond to marketing communication in a similar way so that companies can reach out for each group in a relevant and effective way. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/03/market-basket-analysis-part-2-of-3/">
+      <div class="post-card-image" style="background-image: url(/img/victoriano-izquierdo-JG35CpZLfVs-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/03/market-basket-analysis-part-2-of-3/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Machine Learning 
+              #Market Basket Analysis  </span>
+              
+              <h2 class="post-card-title">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the SECOND, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+    </div>
+  </div>
+</aside>
+
+<div class="floating-header">
+  <div class="floating-header-logo">
+    <a href="/">
+      
+      <span></span>
+    </a>
+  </div>
+  <span class="floating-header-divider">&mdash;</span>
+  <div class="floating-header-title">Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering</div>
+  <div class="floating-header-share">
+    <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/></svg>
+    </div>
+    
+    <a class="floating-header-share-tw" href="https://twitter.com/share?text=Market%20Basket%20Analysis%20-%20Part%203%20of%203%3a%20A%20Shiny%20Product%20Recommender%20with%20Improved%20Collaborative%20Filtering&amp;url=%2f2019%2f04%2fmarket-basket-analysis-part-3-of-3%2f"
+          onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+      </a>
+      <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=%2f2019%2f04%2fmarket-basket-analysis-part-3-of-3%2f"
+          onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+      </a>
+  </div>
+
+  <progress class="progress" value="0">
+    <div class="progress-container">
+      <span class="progress-bar"></span>
+    </div>
+  </progress>
+</div>
+
+
+
+<footer class="site-footer outer">
+  <div class="site-footer-content inner">
+    <section class="copyright" style="line-height: 1.3em;">
+      <a href="/">Diego Usai</a> © 2019 <br>
+      <span style="font-size: 0.8em; color: #555;">Hugo port of <a href="https://github.com/TryGhost/Casper">Casper 2.1.7</a> by <a href="https://www.telematika.org">EM</a></span>
+    </section>
+    <nav class="site-footer-nav">
+        <a href="/">Latest Posts</a>
+        
+        
+        <a href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener">Github</a>
+        <a href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener">Medium</a>
+    </nav>  
+  </div>
+</footer>
+
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    <script>
+
+
+
+
+
+$(document).ready(function () {
+    
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+</body></html>

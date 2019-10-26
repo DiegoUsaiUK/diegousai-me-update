@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en-UK" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab &middot; </title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="canonical" href="/2019/03/market-basket-analysis-part-2-of-3/" />
+
+     <meta name="description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of" /> 
+
+     
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="/img/victoriano-izquierdo-JG35CpZLfVs-unsplash.jpg"/>
+    
+ 
+    <meta name="twitter:title" content="Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab"/>
+    <meta name="twitter:description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of"/>
+    <meta name="twitter:url" content="/2019/03/market-basket-analysis-part-2-of-3/" />
+    <meta name="twitter:site" content="@"/>
+
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab &middot; Lifelong Learning" />
+    <meta property="og:url" content="/2019/03/market-basket-analysis-part-2-of-3/" />
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of" />
+
+    <meta property="article:published_time" content="2019-03-25T00:00:00Z" />
+    <meta property="article:tag" content="Machine Learning" /><meta property="article:tag" content="Market Basket Analysis" />
+
+    <meta property="og:image" content="/img/victoriano-izquierdo-JG35CpZLfVs-unsplash.jpg"/>
+
+
+    <meta name="generator" content="Hugo 0.58.3" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="/built/screen.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/casper-two.css" /> 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
+     <link rel="stylesheet" href="/css/override.css" /> 
+
+     
+
+</head>
+
+
+<body class="post-template">
+  <div class="site-wrapper"> 
+
+<header class="site-header outer">
+  <div class="inner">
+    <nav class="site-nav">
+      <div class="site-nav-left">
+
+        <ul class="nav" role="menu">
+        
+        
+        
+            <li class="" role="menuitem">
+              <a href="/">Home</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/articles/">Articles</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/market-basket-analysis">projects</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/tags/">Tags</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/about/">About</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/contact/">Contact</a>
+            </li>
+        
+      </ul></div>
+
+      <div class="site-nav-right">
+        <div class="social-links">
+                    
+
+                    
+
+                    <a class="social-link" href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+
+                    <a class="social-link" href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 512 512"><path d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683 C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615 c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915 s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z" /></svg></a>
+
+                    <a class="social-link" href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 195 195"><path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"/></svg></a>
+        </div>  
+            
+      </div>
+
+    </nav>  
+
+  </div>
+</header>
+
+<main id="site-main" class="site-main outer" role="main">
+  <div class="inner">
+    
+      <article class="post-full post"> 
+    <header class="post-full-header">
+        <section class="post-full-meta">
+            <time class="post-full-meta-date" datetime="2019-03-25">25 March 2019</time>
+                <span class="date-divider">/</span> <a href="/tags/machine-learning/">#Machine Learning</a>&nbsp;<a href="/tags/market-basket-analysis/">#Market Basket Analysis</a>&nbsp;
+        </section>
+        <h1 class="post-full-title">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</h1>
+    </header>
+    
+    <figure class="post-full-image" style="background-image: url(/img/victoriano-izquierdo-JG35CpZLfVs-unsplash.jpg)">
+    </figure>
+
+    <section class="post-full-content">
+        <div class="kg-card-markdown">
+        
+
+
+<p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into <strong>three parts</strong>, of which this is the <strong>SECOND</strong>, that I have organised as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>In the <a href="https://diegousai.io/2019/03/market-basket-analysis-part-1-of-3"><strong>first</strong></a> chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.</p></li>
+<li><p>For the <a href="https://diegousai.io/2019/03/market-basket-analysis-part-2-of-3"><strong>second</strong></a> part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. This will be done with the support of the <strong>recommenderlab</strong> package.</p></li>
+<li><p>In the <a href="https://diegousai.io/2019/04/market-basket-analysis-part-3-of-3"><strong>third</strong></a> and final instalment, I will implement the selected model in a <a href="https://diegousai.shinyapps.io/Product_Recommender/"><strong>Shiny Web Application</strong></a>.</p></li>
+</ol>
+<p><strong>Loading the Packages</strong></p>
+<pre class="r"><code># Importing libraries
+library(data.table)
+library(tidyverse)            
+library(knitr)
+library(recommenderlab)</code></pre>
+<p><strong>THE DATA</strong></p>
+<p>For the analysis I will be using the <code>retail</code> dataset prepared and cleansed in <a href="https://diegousai.io/2019/03/market-basket-analysis-part-1-of-3"><strong>Part 1</strong></a>.</p>
+<pre class="r"><code>glimpse(retail)</code></pre>
+<p><strong>MODELLING</strong></p>
+<p>For the analysis part of this project I am using <a href="https://cran.r-project.org/web/packages/recommenderlab/index.html"><strong>recommenderlab</strong></a>, an R package which provides a convenient framework to evaluate and compare various recommendation algorithms and quickly establish the best performing one.</p>
+<p><strong>Create the Rating Matrix</strong></p>
+<p>I now need to arrange the purchase history in a <code>ratings matrix</code>, with orders in rows and products in columns. This format is often called <code>user-item matrix</code> because <em>“users”</em> (e.g. customers or orders) tend to be on the rows and <em>“items”</em> (e.g. products) on the columns.</p>
+<p><strong>recommenderlab</strong> accepts 2 types of rating matrix for modelling:</p>
+<ul>
+<li><p><strong>real rating matrix</strong> consisting of actual user ratings, which requires normalisation.</p></li>
+<li><p><strong>binary rating matrix</strong> consisting of <strong>0’s</strong> and <strong>1’s</strong>, where <strong>1’s</strong> indicate if the product was purchased. This is the matrix type needed for the analysis and it does not require normalisation.</p></li>
+</ul>
+<p>However, when creating the rating matrix, it becomes apparent that some orders contain the same item more than once, as shown in the example below.</p>
+<pre class="r"><code>retail %&gt;% 
+# Filtering by an order number which contains the same stock code more than once
+  filter(InvoiceNo == 557886 &amp; StockCode == 22436) %&gt;% 
+  select(InvoiceNo, StockCode, Quantity, UnitPrice, CustomerID)</code></pre>
+<p>It is possible that the company that donated this dataset to the <a href="http://archive.ics.uci.edu/ml/index.php"><strong>UCI Machine Learning Repository</strong></a> had an order processing system that allowed for an item to be added multiple times to the same order. For this analysis, I only need to know if an item was included in an order, so these duplicates need to be removed.</p>
+<pre class="r"><code>retail &lt;- retail %&gt;% 
+# create unique identifier
+    mutate(InNo_Desc = paste(InvoiceNo, Description, sep = &#39; &#39;)) 
+# filter out duplicates and drop unique identifier
+    retail &lt;- retail[!duplicated(retail$InNo_Desc), ] %&gt;% 
+    select(-InNo_Desc)
+
+# CHECK:  total row count - 517,354</code></pre>
+<p>I can now create the rating matrix.</p>
+<pre class="r"><code>ratings_matrix &lt;- retail %&gt;%
+# Select only needed variables
+  select(InvoiceNo, Description) %&gt;% 
+# Add a column of 1s
+  mutate(value = 1) %&gt;%
+# Spread into user-item format
+  spread(Description, value, fill = 0) %&gt;%
+  select(-InvoiceNo) %&gt;%
+# Convert to matrix
+  as.matrix() %&gt;%
+# Convert to recommenderlab class &#39;binaryRatingsMatrix&#39;
+  as(&quot;binaryRatingMatrix&quot;)
+
+ratings_matrix</code></pre>
+<p><strong>Evaluation Scheme and Model Validation</strong></p>
+<p>In order to establish the models effectiveness, <strong>recommenderlab</strong> implements a number of evaluation schemes.
+In this <code>scheme</code>, I split the data into a train set and a test set by selecting <em>train = 0.8</em> for a 80/20 train/test split. I have also set <em>method = “cross”</em> and <em>k = 5</em> for a 5-fold cross validation. This means that the data is divided into k subsets of equal size, with 80% of the data used for training and the remaining 20% used for evaluation. The models are recursively estimated 5 times, each time using a different train/test split, which ensures that all users and items are considered for both training and testing. The results can then be averaged to produce a single evaluation.</p>
+<p>Selecting <em>given = -1</em> means that for the test users ‘all but 1’ randomly selected item is withheld for evaluation.</p>
+<pre class="r"><code>scheme &lt;- ratings_matrix %&gt;% 
+  evaluationScheme(method = &quot;cross&quot;,
+                   k      = 5, 
+                   train  = 0.8,  
+                   given  = -1)</code></pre>
+<pre class="r"><code>scheme</code></pre>
+<p><strong>Set up List of Algorithms</strong></p>
+<p>One of <strong>recommenderlab</strong> main features is the ability to estimate multiple algorithms in one go. First, I create a list with the <code>algorithms</code> I want to estimate, specifying all the models parameters. Here, I consider schemes which evaluate on a <strong>binary rating matrix</strong> and include the <strong>random items</strong> algorithm for benchmarking purposes.</p>
+<pre class="r"><code>algorithms &lt;- list(
+  &quot;association rules&quot; = list(name  = &quot;AR&quot;, param = list(supp = 0.01, conf = 0.01)),
+  &quot;random items&quot;      = list(name  = &quot;RANDOM&quot;,  param = NULL),
+  &quot;popular items&quot;     = list(name  = &quot;POPULAR&quot;, param = NULL),
+  &quot;item-based CF&quot;     = list(name  = &quot;IBCF&quot;, param = list(k = 5)),
+  &quot;user-based CF&quot;     = list(name  = &quot;UBCF&quot;, param = list(method = &quot;Cosine&quot;, nn = 500))
+  )</code></pre>
+<p><strong>Estimate the Models</strong></p>
+<p>All I have to do now is to pass <code>scheme</code> and <code>algoritms</code> to the <code>evaluate()</code> function, select <em>type = topNList</em> to evaluate a Top N List of product recommendations and specify how many recommendations to calculate with the parameter <em>n = c(1, 3, 5, 10, 15, 20)</em>.</p>
+<p>Please note that the CF based algorithms take a few minutes each to estimate.</p>
+<pre class="r"><code>results &lt;- recommenderlab::evaluate(scheme, 
+                                    algorithms, 
+                                    type  = &quot;topNList&quot;, 
+                                    n     = c(1, 3, 5, 10, 15, 20)
+                                    )</code></pre>
+<pre><code>## AR run fold/sample [model time/prediction time]
+##   1  [0.32sec/73.86sec] 
+##   2  [0.3sec/72.32sec] 
+##   3  [0.36sec/124.37sec] 
+##   4  [0.56sec/147.29sec] 
+##   5  [0.45sec/87.75sec] 
+## RANDOM run fold/sample [model time/prediction time]
+##   1  [0sec/27.57sec] 
+##   2  [0sec/25.06sec] 
+##   3  [0sec/25.12sec] 
+##   4  [0sec/25.28sec] 
+##   5  [0sec/25.82sec] 
+## POPULAR run fold/sample [model time/prediction time]
+##   1  [0.03sec/31.18sec] 
+##   2  [0sec/31.33sec] 
+##   3  [0.03sec/52.74sec] 
+##   4  [0.02sec/51.56sec] 
+##   5  [0.01sec/51.38sec] 
+## IBCF run fold/sample [model time/prediction time]
+##   1  [859.56sec/4.59sec] 
+##   2  [854.06sec/4.19sec] 
+##   3  [877.46sec/4.26sec] 
+##   4  [893.88sec/5.51sec] 
+##   5  [848.22sec/4.98sec] 
+## UBCF run fold/sample [model time/prediction time]
+##   1  [0sec/519.28sec] 
+##   2  [0sec/349.21sec] 
+##   3  [0sec/444.21sec] 
+##   4  [0sec/290.35sec] 
+##   5  [0sec/290.21sec]</code></pre>
+<p>The output is stored as a list containing all the evaluations.</p>
+<pre class="r"><code>results</code></pre>
+<p>Results for each single model can be easily retrieved and inspected.</p>
+<pre class="r"><code>results$&#39;popular&#39; %&gt;% 
+  getConfusionMatrix() </code></pre>
+<p><strong>VISUALISE THE RESULTS</strong></p>
+<p><strong>recommenderlab</strong> has a basic <code>plot</code> function that can be used to compare models performance. However, I prefer to sort out the results in a tidy format for added flexibility and charting customisation.</p>
+<p>First, I arrange the confusion matrix output for one model in a convenient format.</p>
+<pre class="r"><code># Pull into a list all confusion matrix information for one model 
+tmp &lt;- results$`user-based CF` %&gt;%
+  getConfusionMatrix()  %&gt;%  
+  as.list() 
+# Calculate average value of 5 cross-validation rounds 
+as.data.frame( Reduce(&quot;+&quot;,tmp) / length(tmp)) %&gt;% 
+# Add a column to mark the number of recommendations calculated
+  mutate(n = c(1, 3, 5, 10, 15, 20)) %&gt;%
+# Select only columns needed and sorting out order 
+  select(&#39;n&#39;, &#39;precision&#39;, &#39;recall&#39;, &#39;TPR&#39;, &#39;FPR&#39;) </code></pre>
+<p>Then, I put the previous steps into a formula.</p>
+<pre class="r"><code>avg_conf_matr &lt;- function(results) {
+  tmp &lt;- results %&gt;%
+    getConfusionMatrix()  %&gt;%  
+    as.list() 
+    as.data.frame( Reduce(&quot;+&quot;,tmp) / length(tmp)) %&gt;% 
+    mutate(n = c(1, 3, 5, 10, 15, 20)) %&gt;%
+    select(&#39;n&#39;, &#39;precision&#39;, &#39;recall&#39;, &#39;TPR&#39;, &#39;FPR&#39;) 
+}</code></pre>
+<p>Next, I use the <code>map()</code> function from the <code>purrr</code> package to get all results in a tidy format, ready for charting.</p>
+<pre class="r"><code># Using map() to iterate function across all models
+results_tbl &lt;- results %&gt;%
+  map(avg_conf_matr) %&gt;% 
+# Turning into an unnested tibble
+  enframe() %&gt;%
+# Unnesting to have all variables on same level
+  unnest()
+
+results_tbl</code></pre>
+<p><strong>ROC curve</strong>
+Classification models performance can be compared using the ROC curve, which plots the <em>true positive rate</em> (TPR) against the <em>false positive rate</em> (FPR).</p>
+<p>The <strong>item-based collaborative filtering</strong> model is the clear winner as it achieves the highest TPR for any given level of FPR. This means that the model is producing the highest number of relevant recommendations (true positives) for the same level of non-relevant recommendations (false positives).</p>
+<p>Note that using <code>fct_reorder2()</code> arranges plot legend entries by best final FPR and TPR, aligning them with the curves and making the plot easier to read.</p>
+<pre class="r"><code>results_tbl %&gt;%
+  ggplot(aes(FPR, TPR, colour = fct_reorder2(as.factor(name), FPR, TPR))) +
+  geom_line() +
+  geom_label(aes(label = n))  +
+  labs(title = &quot;ROC curves&quot;,
+       colour = &quot;Model&quot;) +
+  theme_grey(base_size = 14)</code></pre>
+<p><strong>Precision-Recall curve</strong>
+Another common way to compare the performance of classification models is with <strong>Precision Vs Recall curves</strong>. <strong>Precision</strong> shows how sensitive models are to <code>False Positives</code> (i.e. recommending an item not very likely to be purchased) whereas <strong>Recall</strong> (which is just another name for the TPR) looks at how sensitive models are to <code>False Negatives</code> (i.e. do not suggest an item which is highly likely to be purchased).</p>
+<p>Normally, we care about accurately predicting which items are more likely to be purchased because this would have a positive impact on sales and revenue. In other words, we want to maximise <strong>Recall</strong> (or minimise FNs) for the same <strong>Precision</strong>.</p>
+<p>The plot confirms that <code>item-based CF</code> is the best model because it has higher <strong>Recall</strong> (i.e. lower FNs) for any given level of <strong>Precision</strong>. This means that <em>IBCF</em> minimises FNs (i.e. not suggesting an item highly likely to be purchased) for all level of FPs.</p>
+<pre class="r"><code>results_tbl %&gt;%
+  ggplot(aes(recall, precision, 
+             colour = fct_reorder2(as.factor(name),  precision, recall))) +
+  geom_line() +
+  geom_label(aes(label = n))  +
+  labs(title = &quot;Precision-Recall curves&quot;,
+       colour = &quot;Model&quot;) +
+  theme_grey(base_size = 14)</code></pre>
+<p><strong>PREDICTION FOR A NEW USER</strong></p>
+<p>The final step is to generate a prediction with the best performing model. To do that, I need to create a made-up purchase order.</p>
+<p>First, I create a string containing 6 products selected at random.</p>
+<pre class="r"><code>customer_order &lt;- c(&quot;GREEN REGENCY TEACUP AND SAUCER&quot;,
+                     &quot;SET OF 3 BUTTERFLY COOKIE CUTTERS&quot;,
+                     &quot;JAM MAKING SET WITH JARS&quot;,
+                     &quot;SET OF TEA COFFEE SUGAR TINS PANTRY&quot;,
+                     &quot;SET OF 4 PANTRY JELLY MOULDS&quot;)</code></pre>
+<p>Next, I put this order in a format that <strong>recommenderlab</strong> accepts.</p>
+<pre class="r"><code>new_order_rat_matrx &lt;- retail %&gt;% 
+# Select item descriptions from retail dataset
+  select(Description) %&gt;% 
+  unique() %&gt;% 
+# Add a &#39;value&#39; column with 1&#39;s for customer order items
+  mutate(value = as.numeric(Description %in% customer_order)) %&gt;% 
+# Spread into sparse matrix format
+  spread(key = Description, value = value) %&gt;% 
+# Change to a matrix
+  as.matrix() %&gt;% 
+# Convert to recommenderlab class &#39;binaryRatingsMatrix&#39;
+  as(&quot;binaryRatingMatrix&quot;)</code></pre>
+<p>Now, I can create a <code>Recommender</code>. I use <code>getData</code> to retrieve training data and set <em>method = “IBCF”</em> to select the best performing model (“item-based collaborative filtering”).</p>
+<pre class="r"><code>recomm &lt;- Recommender(getData(scheme, &#39;train&#39;), 
+                       method = &quot;IBCF&quot;,  
+                       param = list(k = 5))
+
+recomm</code></pre>
+<p>Finally, I can pass the <code>Recommender</code> and the made-up order to the <code>predict</code> function to create a top 10 recommendation list for the new customer.</p>
+<pre class="r"><code>pred &lt;- predict(recomm, 
+                newdata = new_order_rat_matrx, 
+                n       = 10)</code></pre>
+<p>Lastly, the suggested items can be inspected as a list.</p>
+<pre class="r"><code>as(pred, &#39;list&#39;)</code></pre>
+<p><strong>Comments</strong></p>
+<p>This brings to an end the modelling and evaluation part of this project, which I found straightforward and quite enjoyable. <strong>recommenderlab</strong> is intuitive and easy to use and I particularly appreciated its ability to estimate and compare several classification algorithms at the same time. In summary, I have learned how to carry out Market Basket Analysis with <strong>recommenderlab</strong> in R, how to interpret the results and choose the best performing model.</p>
+<p><strong>Code Repository</strong></p>
+<p>The full R code can be found on <a href="https://github.com/DiegoUsaiUK/Market_Basket_Analysis">my GitHub profile</a></p>
+<p><strong>References</strong></p>
+<ul>
+<li>For Recommenderlab Package see: <a href="https://cran.r-project.org/package=recommenderlab">https://cran.r-project.org/package=recommenderlab</a></li>
+<li>For Recommenderlab Package Vignette see: <a href="https://cran.r-project.org/web/packages/recommenderlab/vignettes/recommenderlab.pdf">https://cran.r-project.org/web/packages/recommenderlab/vignettes/recommenderlab.pdf</a></li>
+</ul>
+    
+        </div>
+    </section>
+
+    <footer class="post-full-footer">
+      <section class="author-card">
+        <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+        <section class="author-card-content">
+            <h4 class="author-card-name"><a href="/">Diego Usai</a></h4>
+                <p></p>
+        </section>
+      </section>
+    </footer>
+</article>
+    
+    
+    
+
+  </div>
+</main>
+
+
+<aside class="read-next outer">
+  <div class="inner">
+    <div class="read-next-feed">      
+      
+<article class="read-next-card" 
+            style="background-image: url(/img/simon-zhu-TfRHSL2GKDc-unsplash.jpg);" >
+    <header class="read-next-card-header">
+        <small class="read-next-card-header-sitetitle">&mdash; Lifelong Learning &mdash;</small>
+        
+        <h3 class="read-next-card-header-title"><a href="/tags/machine-learning/">#Machine Learning</a></h3>
+    </header>
+    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+    </div>
+
+    <div class="read-next-card-content">
+      
+        <ul>
+          <li><a href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/">Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation</a></li>            
+        
+          <li><a href="/2019/09/loading-merging-and-joining-datasets/">Loading, Merging and Joining Datasets</a></li>            
+        
+          <li><a href="/2019/05/a-gentle-introduction-to-customer-segmentation/">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</a></li>            
+        
+          <li><a href="/2019/09/modelling-with-tidymodels-and-parsnip/">Modelling with Tidymodels and Parsnip - A Tidy Approach to a Classification Problem</a></li>            
+        </ul>
+    </div>
+    <footer class="read-next-card-footer">
+      
+        <a href="/tags/machine-learning/">See all related posts →</a>
+    </footer>
+</article>
+
+
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/04/market-basket-analysis-part-3-of-3/">
+      <div class="post-card-image" style="background-image: url(/img/neonbrand-SvhXD3kPSTY-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/04/market-basket-analysis-part-3-of-3/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Machine Learning 
+              #Data Product 
+              #Market Basket Analysis  </span>
+              
+              <h2 class="post-card-title">Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the THIRD and last, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/03/market-basket-analysis-part-1-of-3/">
+      <div class="post-card-image" style="background-image: url(/img/tina-bosse-WSw-taiyZPk-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/03/market-basket-analysis-part-1-of-3/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Data Wrangling 
+              #Market Basket Analysis  </span>
+              
+              <h2 class="post-card-title">Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the FIRST, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+    </div>
+  </div>
+</aside>
+
+<div class="floating-header">
+  <div class="floating-header-logo">
+    <a href="/">
+      
+      <span></span>
+    </a>
+  </div>
+  <span class="floating-header-divider">&mdash;</span>
+  <div class="floating-header-title">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</div>
+  <div class="floating-header-share">
+    <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/></svg>
+    </div>
+    
+    <a class="floating-header-share-tw" href="https://twitter.com/share?text=Market%20Basket%20Analysis%20-%20Part%202%20of%203%3a%20Market%20Basket%20Analysis%20with%20recommenderlab&amp;url=%2f2019%2f03%2fmarket-basket-analysis-part-2-of-3%2f"
+          onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+      </a>
+      <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=%2f2019%2f03%2fmarket-basket-analysis-part-2-of-3%2f"
+          onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+      </a>
+  </div>
+
+  <progress class="progress" value="0">
+    <div class="progress-container">
+      <span class="progress-bar"></span>
+    </div>
+  </progress>
+</div>
+
+
+
+<footer class="site-footer outer">
+  <div class="site-footer-content inner">
+    <section class="copyright" style="line-height: 1.3em;">
+      <a href="/">Diego Usai</a> © 2019 <br>
+      <span style="font-size: 0.8em; color: #555;">Hugo port of <a href="https://github.com/TryGhost/Casper">Casper 2.1.7</a> by <a href="https://www.telematika.org">EM</a></span>
+    </section>
+    <nav class="site-footer-nav">
+        <a href="/">Latest Posts</a>
+        
+        
+        <a href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener">Github</a>
+        <a href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener">Medium</a>
+    </nav>  
+  </div>
+</footer>
+
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    <script>
+
+
+
+
+
+$(document).ready(function () {
+    
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+</body></html>

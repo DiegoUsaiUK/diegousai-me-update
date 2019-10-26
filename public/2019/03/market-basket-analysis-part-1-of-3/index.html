@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en-UK" />
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+    <title>Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis &middot; </title>
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="canonical" href="/2019/03/market-basket-analysis-part-1-of-3/" />
+
+     <meta name="description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of" /> 
+
+     
+    
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:image" content="/img/tina-bosse-WSw-taiyZPk-unsplash.jpg"/>
+    
+ 
+    <meta name="twitter:title" content="Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis"/>
+    <meta name="twitter:description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of"/>
+    <meta name="twitter:url" content="/2019/03/market-basket-analysis-part-1-of-3/" />
+    <meta name="twitter:site" content="@"/>
+
+    <meta property="og:site_name" content="" />
+    <meta property="og:title" content="Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis &middot; Lifelong Learning" />
+    <meta property="og:url" content="/2019/03/market-basket-analysis-part-1-of-3/" />
+    
+
+    <meta property="og:type" content="article" />
+    <meta property="og:description" content="My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of" />
+
+    <meta property="article:published_time" content="2019-03-13T00:00:00Z" />
+    <meta property="article:tag" content="Data Wrangling" /><meta property="article:tag" content="Market Basket Analysis" />
+
+    <meta property="og:image" content="/img/tina-bosse-WSw-taiyZPk-unsplash.jpg"/>
+
+
+    <meta name="generator" content="Hugo 0.58.3" />
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="/built/screen.css" /> 
+    <link rel="stylesheet" type="text/css" href="/css/casper-two.css" /> 
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
+     <link rel="stylesheet" href="/css/override.css" /> 
+
+     
+
+</head>
+
+
+<body class="post-template">
+  <div class="site-wrapper"> 
+
+<header class="site-header outer">
+  <div class="inner">
+    <nav class="site-nav">
+      <div class="site-nav-left">
+
+        <ul class="nav" role="menu">
+        
+        
+        
+            <li class="" role="menuitem">
+              <a href="/">Home</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/articles/">Articles</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/market-basket-analysis">projects</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/tags/">Tags</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/about/">About</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/contact/">Contact</a>
+            </li>
+        
+      </ul></div>
+
+      <div class="site-nav-right">
+        <div class="social-links">
+                    
+
+                    
+
+                    <a class="social-link" href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a>
+
+                    <a class="social-link" href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 50 512 512"><path d="M150.65,100.682c0,27.992-22.508,50.683-50.273,50.683c-27.765,0-50.273-22.691-50.273-50.683 C50.104,72.691,72.612,50,100.377,50C128.143,50,150.65,72.691,150.65,100.682z M143.294,187.333H58.277V462h85.017V187.333z M279.195,187.333h-81.541V462h81.541c0,0,0-101.877,0-144.181c0-38.624,17.779-61.615,51.807-61.615 c31.268,0,46.289,22.071,46.289,61.615c0,39.545,0,144.181,0,144.181h84.605c0,0,0-100.344,0-173.915 s-41.689-109.131-99.934-109.131s-82.768,45.369-82.768,45.369V187.333z" /></svg></a>
+
+                    <a class="social-link" href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 195 195"><path d="M46.5340803,65.2157554 C46.6968378,63.6076572 46.0836,62.018231 44.8828198,60.93592 L32.6512605,46.2010582 L32.6512605,44 L70.6302521,44 L99.9859944,108.380952 L125.794585,44 L162,44 L162,46.2010582 L151.542017,56.2281011 C150.640424,56.9153477 150.193188,58.0448862 150.380019,59.1628454 L150.380019,132.837155 C150.193188,133.955114 150.640424,135.084652 151.542017,135.771899 L161.755369,145.798942 L161.755369,148 L110.38282,148 L110.38282,145.798942 L120.963119,135.527337 C122.002801,134.487948 122.002801,134.182246 122.002801,132.592593 L122.002801,73.0417402 L92.585901,147.755438 L88.6106443,147.755438 L54.3622782,73.0417402 L54.3622782,123.115814 C54.0767278,125.221069 54.7759199,127.3406 56.2581699,128.863022 L70.0186741,145.55438 L70.0186741,147.755438 L31,147.755438 L31,145.55438 L44.7605042,128.863022 C46.2319621,127.338076 46.8903838,125.204485 46.5340803,123.115814 L46.5340803,65.2157554 Z"/></svg></a>
+        </div>  
+            
+      </div>
+
+    </nav>  
+
+  </div>
+</header>
+
+<main id="site-main" class="site-main outer" role="main">
+  <div class="inner">
+    
+      <article class="post-full post"> 
+    <header class="post-full-header">
+        <section class="post-full-meta">
+            <time class="post-full-meta-date" datetime="2019-03-13">13 March 2019</time>
+                <span class="date-divider">/</span> <a href="/tags/data-wrangling/">#Data Wrangling</a>&nbsp;<a href="/tags/market-basket-analysis/">#Market Basket Analysis</a>&nbsp;
+        </section>
+        <h1 class="post-full-title">Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</h1>
+    </header>
+    
+    <figure class="post-full-image" style="background-image: url(/img/tina-bosse-WSw-taiyZPk-unsplash.jpg)">
+    </figure>
+
+    <section class="post-full-content">
+        <div class="kg-card-markdown">
+             
+
+
+
+<p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into <strong>three parts</strong>, of which this is the <strong>FIRST</strong>, that I have organised as follows:</p>
+<ol style="list-style-type: decimal">
+<li><p>In the <a href="https://diegousai.io/2019/03/market-basket-analysis-part-1-of-3"><strong>first</strong></a> chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.</p></li>
+<li><p>For the <a href="https://diegousai.io/2019/03/market-basket-analysis-part-2-of-3"><strong>second</strong></a> part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. This will be done with the support of the <strong>recommenderlab</strong> package.</p></li>
+<li><p>In the <a href="https://diegousai.io/2019/04/market-basket-analysis-part-3-of-3"><strong>third</strong></a> and final instalment, I will implement the selected model in a <a href="https://diegousai.shinyapps.io/Product_Recommender/"><strong>Shiny Web Application</strong></a>.</p></li>
+</ol>
+<p><strong>INTRODUCTION</strong></p>
+<p>Market Basket Analysis or MBA <a href="https://en.wikipedia.org/wiki/Affinity_analysis">(also referred to as Affinity Analysis)</a> is a set of data mining and data analysis techniques used to understand customers shopping behaviours and uncover relationships among the products that they buy. By analysing the likes of retail basket composition, transactional data, or browsing history, these methods can be used to suggest to customers items they might be interested in. Such recommendations can promote customer loyalty, increase conversion rate by helping customers to find relevant products faster and boost cross-selling and up-selling by suggesting additional items or services.</p>
+<p>Recommendation systems are widely employed in several industries.
+Online retailer <strong>Amazon</strong> uses these methods to recommend to their customers products that other people often buy together (‘customers who bought this item also bought…’).
+Every Monday since 2015 entertainment company <strong>Spotify</strong> suggests to their users a tailored playlist of 30 songs they’ve never listened to based on their consumption history.
+In 2009 <strong>Netflix</strong> famously ran a competition <a href="http://www.netflixprize.com">(The Netflix Prize)</a> which awarded a $1M Grand Prize to the team that improved the predictions of their movie recommendation system.</p>
+<p>Market Basket Analysis also finds applications in such areas as:</p>
+<ul>
+<li><p><strong>Promotions:</strong> MBA may give indications on how to structure promotion calendars. When two items (say, torch &amp; batteries) are often bought together, a retailer may decide to have only one item on promotion to boost sales of the other.</p></li>
+<li><p><strong>Store Design:</strong> store layout can be shaped to place closer together items which are more often bought at the same time (e.g. milk &amp; cereals, shampoo &amp; conditioner, meat &amp; vegetables, etc.)</p></li>
+<li><p><strong>Loyalty Programmes:</strong> when a customer has been inactive for some time, he/she can be prompted to re-engage with customised offers based on their purchase history.</p></li>
+</ul>
+<p><strong>TYPES OF RECOMMENDER SYSTEMS</strong></p>
+<p>There are several types of recommendation systems, each with their advantages and drawbacks.</p>
+<p>I’ve arranged below a brief overview of some of the most known and used methods - please click on the tabs to have a look.</p>
+<p><strong>Association Rules </strong></p>
+<p><em>Association Rules</em> analyses items most frequently purchased together to discover strong patterns in the data. Rules associating any pair of purchased items are establish using three metrics: “Support”, “Confidence”, and “Lift”:</p>
+<ul>
+<li><code>Support</code> is the probability of two items being purchased together. P(Item1 &amp; Item2)</li>
+<li><code>Confidence</code> is Support divided by the probability of buying Item2. Support / P(Item2)</li>
+<li><code>Lift</code> is Confidence divided by the probability of buying Item1. Confidence / P(Item1)</li>
+</ul>
+<p>The item with the highest <em>Lift</em> is the one most likely to be purchased. One drawback is that this approach doesn’t take into consideration the user’s purchase history.</p>
+<p><strong>Popular Items </strong></p>
+<p>As the name suggests, recommendations are based on general purchasing trends. Suggestions come from a list of most frequently purchased items that the customer has not yet bought. The main limitation for this approach is that the advice may not be entirely relevant to the customer.</p>
+<p><strong>Content-based Filtering</strong></p>
+<p>A <em>content-based</em> recommendation system investigates a client’s purchase history to understand hers/his preferences and recommends items similar to those the client has liked in the past. However, this approach relies on detailed transaction information, which may not always be available.</p>
+<p><strong>Collaborative Filtering</strong></p>
+<p>When a <em>collaborative filtering</em> is used, the recommendation system looks at either clients purchase history or clients product rating history. These are compiled into a <strong>user-item ratings matrix</strong>, with items (e.g. products) in the columns and users (e.g. customers or orders) in the rows. A measure of similarity is then calculated using methods like <code>Cosine</code>, <code>Pearsons</code> or <code>Jaccard</code> similarity to identify a hierarchy of probability to purchase.</p>
+<p>Two methodologies are made use of:</p>
+<p><em>User-based collaborative filtering (UBCF)</em> focuses on similarities between users market basket composition to find other users with similar baskets. Similarity measures are then calculated and used to shape the suggestions list.</p>
+<p><em>Item-based collaboartive filtering (IBCF)</em> employes a similar appsoach but focuses instead on similarities between items that are frequently purchased together.</p>
+<p><strong>Hybrid Systems</strong></p>
+<p><em>Hybrid systems</em> try to combine some of the approaches to overcome their limitations. There is a rich literature available online, in particular on the combining of <strong>collaborative filtering</strong> and <strong>content-based filtering</strong>, which in some cases have shown to be more effective than the pure approaches.</p>
+<p>The Wikipedia article on <a href="https://en.wikipedia.org/wiki/Recommender_system#Hybrid_recommender_systems">Hybrid recommender systems</a> also makes a very good read on the subject.</p>
+<p><strong>THE DATA</strong></p>
+<p>The data for this project comes from the <a href="http://archive.ics.uci.edu/ml/index.php"><strong>UCI Machine Learning Repository</strong></a>, an online archive of large datasets which includes a wide variety of data types, analysis tasks, and application areas.</p>
+<p>In this project I’m using the <a href="http://archive.ics.uci.edu/ml/datasets/online+retail"><strong>Online Retail</strong></a> dataset, donated to UCI in 2015 by the School of Engineering at London South Bank University. This is a transnational dataset containing transactions occurring between 01/Dec/2010 and 09/Dec/2011 for a UK-based and registered online retail company. The company sells mainly unique all-occasion gifts and many of their customers are wholesalers.</p>
+<p>For clarity and completeness, I’m including here the variables description</p>
+<table>
+<colgroup>
+<col width="13%" />
+<col width="86%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Attribute</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">InvoiceNo</td>
+<td align="left">Invoice number. 6-digit integral number. Indicates cancellation if starts with ‘C’</td>
+</tr>
+<tr class="even">
+<td align="left">StockCode</td>
+<td align="left">Product (item) code. 5-digit integral number</td>
+</tr>
+<tr class="odd">
+<td align="left">Description</td>
+<td align="left">Product (item) name</td>
+</tr>
+<tr class="even">
+<td align="left">Quantity</td>
+<td align="left">The quantities of each product (item) per transaction. Numeric</td>
+</tr>
+<tr class="odd">
+<td align="left">InvoiceDate</td>
+<td align="left">Invoice Date and Time when each transaction was generated</td>
+</tr>
+<tr class="even">
+<td align="left">UnitPrice</td>
+<td align="left">Unit price. Numeric, Product price per unit in sterling</td>
+</tr>
+<tr class="odd">
+<td align="left">CustomerID</td>
+<td align="left">Customer number. 5-digit integral number unique to each customer</td>
+</tr>
+<tr class="even">
+<td align="left">Country</td>
+<td align="left">Country name. The name of the country where each customer resides</td>
+</tr>
+</tbody>
+</table>
+<p>I’ve picked this particular dataset because of it’s “real life” nature, which shows in the many manually entered annotations and adjustment codes I found in the <em>Description</em> field. There are even personal comments left by the company’s employees, who likely used the database on a day-to-day basis.</p>
+<p>It’s reasonable to assume that the dataset came straight from the company’s database with very little alterations. From experience this is consistent with the state in which an analyst is most likely to receive data from a clients they are to conduct a piece of analysis for.</p>
+<p><strong>DATA PREPARATION</strong></p>
+<p><strong>Loading the Packages</strong></p>
+<pre class="r"><code># Importing libraries
+library(data.table)           
+library(readxl)               
+library(tidyverse)
+library(lubridate)
+library(skimr)                
+library(knitr)                
+library(treemap)</code></pre>
+<p><strong>Loading and Inspecting the Data</strong></p>
+<pre class="r"><code># import raw data file and trim leading and trailing whitespaces
+retail &lt;- read_excel(&quot;Online Retail.xlsx&quot;, trim_ws = TRUE)</code></pre>
+<p>The dataset consists of just over 540,000 observations spread across 8 variables. A few <em>Descriptions</em> and several <em>CustomerIDs</em> are missing and there are also some odd negatives <em>Quantity</em> and <em>UnitPrice</em> that would be worth investigating. It’s also worth noting that <em>InvoiceDate</em> is of POSIXct format, from which information about Date and Time of purchase can be extracted.</p>
+<pre class="r"><code># First glance at the data
+retail %&gt;%  skim()</code></pre>
+<p><em>Cancellations</em></p>
+<p>The very handy <em>Variables Description</em>, which I’ve included above, tells us that if the <em>InvoiceNo</em> starts with letter ‘C’, it indicates a cancellation</p>
+<pre class="r"><code>retail %&gt;% 
+  filter(grepl(&quot;C&quot;, retail$InvoiceNo)) %&gt;% 
+  summarise(Total = n())</code></pre>
+<p>Cancellations are not needed for the analysis so they can be removed</p>
+<pre class="r"><code>retail  &lt;- retail %&gt;% 
+  filter(!grepl(&quot;C&quot;, retail$InvoiceNo)) 
+
+# CHECK: total row count - 532,621</code></pre>
+<p><em>Negative Quantities</em></p>
+<p>When filtering by non positive <em>Quantity</em>, the <em>Description</em> shows what looks like a series of manually entered comments (e.g.“thrown away”, “Unsaleable”, “damaged”,“?”). Given that <em>UnitPrice</em> is also set to zero for all of them, it is safe to assume that these were adjustments codes.</p>
+<pre class="r"><code>retail %&gt;% 
+  filter(Quantity &lt;= 0) %&gt;% 
+  group_by(Description, UnitPrice) %&gt;% 
+  summarise(count = n()) %&gt;%
+  arrange(desc(count)) %&gt;% 
+  ungroup()</code></pre>
+<p>Were this a live project, I would typically sense check this assumption with whomever provided the data. In this case, I will simply remove all rows with non-positive <em>Quantity</em>.</p>
+<pre class="r"><code>retail  &lt;- retail %&gt;% 
+  filter(Quantity &gt; 0)
+
+# CHECK: total row count - 531,285</code></pre>
+<p><em>Non-Product StockCodes</em></p>
+<p>Turning my attention to <em>StockCode</em>, I notice a handful of non-product related codes (‘Postage’, ‘Bank Charges’, ‘Gift Vouchers’, etc.).</p>
+<pre class="r"><code># Non-product related codes
+stc &lt;- c(&#39;AMAZONFEE&#39;, &#39;BANK CHARGES&#39;, &#39;C2&#39;, &#39;DCGSSBOY&#39;, &#39;DCGSSGIRL&#39;,
+         &#39;DOT&#39;, &#39;gift_0001_&#39;, &#39;PADS&#39;, &#39;POST&#39;)</code></pre>
+<pre class="r"><code>retail %&gt;%  
+  filter(grepl(paste(stc, collapse = &quot;|&quot;), StockCode))  %&gt;% 
+  group_by(StockCode, Description) %&gt;% 
+  summarise(count = n()) %&gt;%
+  arrange(desc(count)) %&gt;% 
+  ungroup()</code></pre>
+<p>These can all be removed.</p>
+<pre class="r"><code>retail &lt;- filter(retail, !grepl(paste(stc, collapse = &quot;|&quot;), StockCode))
+
+# CHECK: total row count - 529,228</code></pre>
+<p><em>Description</em></p>
+<p>Focusing now on the <em>Description</em> field, there are an additional 50 manually entered annotations that need removing. I one case an employee has even vented out their frustration at one of their co-workers (“alan hodge cant mamage this section”), with misspelling and all!</p>
+<pre class="r"><code># Additional adjustment codes to remove
+descr &lt;- c( &quot;check&quot;, &quot;check?&quot;, &quot;?&quot;, &quot;??&quot;, &quot;damaged&quot;, &quot;found&quot;, 
+            &quot;adjustment&quot;, &quot;Amazon&quot;, &quot;AMAZON&quot;, &quot;amazon adjust&quot;, 
+            &quot;Amazon Adjustment&quot;, &quot;amazon sales&quot;, &quot;Found&quot;, &quot;FOUND&quot;,
+            &quot;found box&quot;, &quot;Found by jackie &quot;, &quot;Found in w/hse&quot;, &quot;dotcom&quot;,
+            &quot;dotcom adjust&quot;, &quot;allocate stock for dotcom orders ta&quot;, &quot;FBA&quot;,
+            &quot;Dotcomgiftshop Gift Voucher £100.00&quot;, &quot;on cargo order&quot;,
+            &quot;wrongly sold (22719) barcode&quot;, &quot;wrongly marked 23343&quot;,
+            &quot;dotcomstock&quot;, &quot;rcvd be air temp fix for dotcom sit&quot;, &quot;Manual&quot;,
+            &quot;John Lewis&quot;, &quot;had been put aside&quot;, &quot;for online retail orders&quot;,  
+            &quot;taig adjust&quot;, &quot;amazon&quot;, &quot;incorrectly credited C550456 see 47&quot;,
+            &quot;returned&quot;, &quot;wrongly coded 20713&quot;, &quot;came coded as 20713&quot;, 
+            &quot;add stock to allocate online orders&quot;, &quot;Adjust bad debt&quot;,
+            &quot;alan hodge cant mamage this section&quot;, &quot;website fixed&quot;,
+            &quot;did  a credit  and did not tick ret&quot;, &quot;michel oops&quot;,
+            &quot;incorrectly credited C550456 see 47&quot;, &quot;mailout&quot;, &quot;test&quot;,
+            &quot;Sale error&quot;,  &quot;Lighthouse Trading zero invc incorr&quot;, &quot;SAMPLES&quot;,
+            &quot;Marked as 23343&quot;, &quot;wrongly coded 23343&quot;,&quot;Adjustment&quot;, 
+            &quot;rcvd be air temp fix for dotcom sit&quot;, &quot;Had been put aside.&quot;
+          )</code></pre>
+<p>Filtering out the unwanted entries.</p>
+<pre class="r"><code>retail &lt;- retail %&gt;% 
+  filter(!Description %in% descr)
+
+# CHECK: total row count - 528,732</code></pre>
+<p>Last but not least, there are also some 600 NAs in <em>Description</em>.</p>
+<pre class="r"><code>sum(is.na(retail$Description))</code></pre>
+<p>Potentially, I could have used <em>StockCode</em> to derive the missing entries, but given their small number (around 0.1% of total) I’ve opted to just remove them.</p>
+<pre class="r"><code>retail &lt;- retail %&gt;% 
+  filter(!is.na(Description))
+
+# CHECK: total row count - 528,148</code></pre>
+<p><em>Customer ID</em></p>
+<p>There is still a significant number of NAs in <em>CustomerID</em>, which I will leave as they are.</p>
+<pre class="r"><code>retail$CustomerID %&gt;%  
+  skim()</code></pre>
+<p>As I will discuss in the <strong>modelling</strong> part, for the analysis I need to arrange data in a <strong>user-item</strong> format, where <em>“users”</em> can be either customers or orders. Given that there are almost 5 times as many <em>Orders</em> as there are <em>Customers</em>, I am going to use <code>InvoiceNo</code> for orders in the analysis, which should make for a richer information set.</p>
+<pre class="r"><code>sapply(retail[,c(&#39;InvoiceNo&#39;,&#39;CustomerID&#39;)], function(x) length(unique(x)))</code></pre>
+<p><em>Final touches</em></p>
+<p>There are a couple of housekeeping tasks to sort out and I am ready to go!</p>
+<pre class="r"><code>retail &lt;- retail %&gt;%
+# Setting &#39;Description&#39; and &#39;Country&#39; as factors
+  mutate(Description = as.factor(Description)) %&gt;%
+  mutate(Country = as.factor(Country)) %&gt;% 
+# Changing &#39;InvoiceNo&#39; type to numeric
+  mutate(InvoiceNo = as.numeric(InvoiceNo)) %&gt;% 
+# Extracting &#39;Date&#39; and &#39;Time&#39; from &#39;InvoiceDate&#39;
+  mutate(Date = as.Date(InvoiceDate)) %&gt;% 
+  mutate(Time = as.factor(format(InvoiceDate,&quot;%H:%M:%S&quot;))) 
+
+glimpse(retail)</code></pre>
+<p><strong>EXPLORATORY DATA ANALYSIS</strong></p>
+<p>And I am now ready to start exploring the dataset different features.</p>
+<p><strong>What items do people buy more often?</strong></p>
+<p>The heart-shaped tea light holder is the most popular item.</p>
+<pre class="r"><code>retail %&gt;% 
+  group_by(Description) %&gt;% 
+  summarize(count = n()) %&gt;% 
+  top_n(10, wt = count) %&gt;%
+  arrange(desc(count)) %&gt;% 
+  ggplot(aes(x = reorder(Description, count), y = count)) +
+  geom_bar(stat = &quot;identity&quot;, fill = &quot;royalblue&quot;, colour = &quot;blue&quot;) +
+  labs(x = &quot;&quot;, y = &quot;Top 10 Best Sellers&quot;) +
+  coord_flip() +
+  theme_grey(base_size = 12)</code></pre>
+<p>Top 10 most sold products represent around 3% of total items sold by the company</p>
+<pre class="r"><code>retail %&gt;% 
+  group_by(Description) %&gt;% 
+  summarize(count = n()) %&gt;% 
+  mutate(pct = (count/sum(count))*100) %&gt;% 
+  arrange(desc(pct)) %&gt;% 
+  ungroup() %&gt;% 
+  top_n(10, wt = pct)</code></pre>
+<p><strong>What time of day do people buy more often?</strong></p>
+<p>Lunchtime is the preferred time for shopping online, with the majority of orders places between 12 noon and 3pm.</p>
+<pre class="r"><code>retail %&gt;% 
+  ggplot(aes(hour(hms(Time)))) + 
+  geom_histogram(stat = &quot;count&quot;,fill = &quot;#E69F00&quot;, colour = &quot;red&quot;) +
+  labs(x = &quot;Hour of Day&quot;, y = &quot;&quot;) +
+  theme_grey(base_size = 12)</code></pre>
+<p><strong>What day of the week do people buy more often?</strong></p>
+<p>Orders peaks on Thursdays with no orders processed on Saturdays.</p>
+<pre class="r"><code>retail %&gt;% 
+  ggplot(aes(wday(Date, 
+                  week_start = getOption(&quot;lubridate.week.start&quot;, 1)))) + 
+  geom_histogram(stat = &quot;count&quot; , fill = &quot;forest green&quot;, colour = &quot;dark green&quot;) +
+  labs(x = &quot;Day of Week&quot;, y = &quot;&quot;) +
+  scale_x_continuous(breaks = c(1,2,3,4,5,6,7),
+                     labels = c(&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;)) +
+  theme_grey(base_size = 14)</code></pre>
+<p><strong>How many items does each customer buy?</strong></p>
+<p>The large majority of customers typically purchase between 2 and 15 items, with a peak at 2.</p>
+<pre class="r"><code>retail %&gt;% 
+  group_by(InvoiceNo) %&gt;% 
+  summarise(n = mean(Quantity)) %&gt;%
+  ggplot(aes(x = n)) +
+  geom_histogram(bins = 100000, fill = &quot;purple&quot;, colour = &quot;black&quot;) + 
+  coord_cartesian(xlim = c(0,100)) +
+  scale_x_continuous(breaks = seq(0,100,10)) +
+  labs(x = &quot;Average Number of Items per Purchase&quot;, y = &quot;&quot;) +
+  theme_grey(base_size = 14)</code></pre>
+<p><strong>What is the average value per order?</strong></p>
+<p>The bulk of orders have a value below £20, with the distribution showing a double peak, one at £6 and a more pronounced one at £17.</p>
+<pre class="r"><code>retail %&gt;% 
+  mutate(Value = UnitPrice * Quantity) %&gt;% 
+  group_by(InvoiceNo) %&gt;% 
+  summarise(n = mean(Value)) %&gt;%
+  ggplot(aes(x = n)) +
+  geom_histogram(bins = 200000, fill = &quot;firebrick3&quot;, colour = &quot;sandybrown&quot;) + 
+  coord_cartesian(xlim = c(0,100)) +
+  scale_x_continuous(breaks = seq(0,100,10)) +
+  labs(x = &quot;Average Value per Purchase&quot;, y = &quot;&quot;) + 
+  theme_grey(base_size = 14)</code></pre>
+<p><strong>Which countries do they sell their goods to?</strong></p>
+<p>Five sixths of the orders come from the United Kingdom.</p>
+<pre class="r"><code>treemap(retail,
+        index      = c(&quot;Country&quot;),
+        vSize      = &quot;Quantity&quot;,
+        title      = &quot;&quot;,
+        palette    = &quot;Set2&quot;,
+        border.col = &quot;grey40&quot;)</code></pre>
+<p><strong>Comments</strong></p>
+<p>This concludes the data preparation and visualisation part of the project. I have removed <em>Cancellations</em>, eliminated negative <em>Quantity</em> and <em>UnitPrice</em>, got rid of NAs in <em>Description</em> and created two new variables, <em>Date</em> and <em>Time</em>. A total of 13,761 rows (roughly 2.5% of the initial count) were discarded and the dataset has now 528,148 observations.</p>
+<p><strong>Code Repository</strong></p>
+<p>The full R code can be found on <a href="https://github.com/DiegoUsaiUK/Market_Basket_Analysis">my GitHub profile</a></p>
+<p><strong>References</strong></p>
+<ul>
+<li>For Recommenderlab Package see: <a href="https://cran.r-project.org/package=recommenderlab">https://cran.r-project.org/package=recommenderlab</a></li>
+<li>For Recommenderlab Package Vignette see: <a href="https://cran.r-project.org/web/packages/recommenderlab/vignettes/recommenderlab.pdf">https://cran.r-project.org/web/packages/recommenderlab/vignettes/recommenderlab.pdf</a></li>
+</ul>
+    
+        </div>
+    </section>
+
+    <footer class="post-full-footer">
+      <section class="author-card">
+        <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+        <section class="author-card-content">
+            <h4 class="author-card-name"><a href="/">Diego Usai</a></h4>
+                <p></p>
+        </section>
+      </section>
+    </footer>
+</article>
+    
+    
+    
+
+  </div>
+</main>
+
+
+<aside class="read-next outer">
+  <div class="inner">
+    <div class="read-next-feed">      
+      
+<article class="read-next-card" 
+            style="background-image: url(/img/simon-zhu-TfRHSL2GKDc-unsplash.jpg);" >
+    <header class="read-next-card-header">
+        <small class="read-next-card-header-sitetitle">&mdash; Lifelong Learning &mdash;</small>
+        
+        <h3 class="read-next-card-header-title"><a href="/tags/data-wrangling/">#Data Wrangling</a></h3>
+    </header>
+    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+    </div>
+
+    <div class="read-next-card-content">
+      
+        <ul>
+          <li><a href="/2019/04/market-basket-analysis-part-3-of-3/">Market Basket Analysis - Part 3 of 3: A Shiny Product Recommender with Improved Collaborative Filtering</a></li>            
+        
+          <li><a href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/">Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation</a></li>            
+        
+          <li><a href="/2019/05/a-gentle-introduction-to-customer-segmentation/">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</a></li>            
+        
+          <li><a href="/2019/09/loading-merging-and-joining-datasets/">Loading, Merging and Joining Datasets</a></li>            
+        </ul>
+    </div>
+    <footer class="read-next-card-footer">
+      
+        <a href="/tags/data-wrangling/">See all related posts →</a>
+    </footer>
+</article>
+
+
+      
+      <article class="post-card post"> 
+    
+    <a class="post-card-image-link" href="/2019/03/market-basket-analysis-part-2-of-3/">
+      <div class="post-card-image" style="background-image: url(/img/victoriano-izquierdo-JG35CpZLfVs-unsplash.jpg)"></div>
+    </a>
+    
+
+    <div class="post-card-content">
+      <a class="post-card-content-link" href="/2019/03/market-basket-analysis-part-2-of-3/">
+          <header class="post-card-header">
+              <span class="post-card-tags">
+              #Machine Learning 
+              #Market Basket Analysis  </span>
+              
+              <h2 class="post-card-title">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</h2>
+          </header>
+          <section class="post-card-excerpt">
+              
+                <p>My objective for this piece of work is to carry out a Market Basket Analysis as an end-to-end data science project. I have split the output into three parts, of which this is the SECOND, that I have organised as follows:
+In the first chapter, I will source, explore and format a complex dataset suitable for modelling with recommendation algorithms.
+For the second part, I will apply various machine learning algorithms for Product Recommendation and select the best performing model. ...  </p>
+              
+          </section>
+      </a>
+
+      <footer class="post-card-meta">
+          <img class="author-profile-image" src="/img/Me_1.jpg" alt="Author" />
+          <span class="post-card-author"><a href="/">Diego Usai</a></span>
+      </footer>
+    </div>
+</article>
+      
+      
+    </div>
+  </div>
+</aside>
+
+<div class="floating-header">
+  <div class="floating-header-logo">
+    <a href="/">
+      
+      <span></span>
+    </a>
+  </div>
+  <span class="floating-header-divider">&mdash;</span>
+  <div class="floating-header-title">Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</div>
+  <div class="floating-header-share">
+    <div class="floating-header-share-label">Share this <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+     <path d="M7.5 15.5V4a1.5 1.5 0 1 1 3 0v4.5h2a1 1 0 0 1 1 1h2a1 1 0 0 1 1 1H18a1.5 1.5 0 0 1 1.5 1.5v3.099c0 .929-.13 1.854-.385 2.748L17.5 23.5h-9c-1.5-2-5.417-8.673-5.417-8.673a1.2 1.2 0 0 1 1.76-1.605L7.5 15.5zm6-6v2m-3-3.5v3.5m6-1v2"/></svg>
+    </div>
+    
+    <a class="floating-header-share-tw" href="https://twitter.com/share?text=Market%20Basket%20Analysis%20-%20Part%201%20of%203%3a%20Data%20Preparation%20and%20Exploratory%20Data%20Analysis&amp;url=%2f2019%2f03%2fmarket-basket-analysis-part-1-of-3%2f"
+          onclick="window.open(this.href, 'share-twitter', 'width=550,height=235');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M30.063 7.313c-.813 1.125-1.75 2.125-2.875 2.938v.75c0 1.563-.188 3.125-.688 4.625a15.088 15.088 0 0 1-2.063 4.438c-.875 1.438-2 2.688-3.25 3.813a15.015 15.015 0 0 1-4.625 2.563c-1.813.688-3.75 1-5.75 1-3.25 0-6.188-.875-8.875-2.625.438.063.875.125 1.375.125 2.688 0 5.063-.875 7.188-2.5-1.25 0-2.375-.375-3.375-1.125s-1.688-1.688-2.063-2.875c.438.063.813.125 1.125.125.5 0 1-.063 1.5-.25-1.313-.25-2.438-.938-3.313-1.938a5.673 5.673 0 0 1-1.313-3.688v-.063c.813.438 1.688.688 2.625.688a5.228 5.228 0 0 1-1.875-2c-.5-.875-.688-1.813-.688-2.75 0-1.063.25-2.063.75-2.938 1.438 1.75 3.188 3.188 5.25 4.25s4.313 1.688 6.688 1.813a5.579 5.579 0 0 1 1.5-5.438c1.125-1.125 2.5-1.688 4.125-1.688s3.063.625 4.188 1.813a11.48 11.48 0 0 0 3.688-1.375c-.438 1.375-1.313 2.438-2.563 3.188 1.125-.125 2.188-.438 3.313-.875z"/></svg>
+      </a>
+      <a class="floating-header-share-fb" href="https://www.facebook.com/sharer/sharer.php?u=%2f2019%2f03%2fmarket-basket-analysis-part-1-of-3%2f"
+          onclick="window.open(this.href, 'share-facebook','width=580,height=296');return false;">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><path d="M19 6h5V0h-5c-3.86 0-7 3.14-7 7v3H8v6h4v16h6V16h5l1-6h-6V7c0-.542.458-1 1-1z"/></svg>
+      </a>
+  </div>
+
+  <progress class="progress" value="0">
+    <div class="progress-container">
+      <span class="progress-bar"></span>
+    </div>
+  </progress>
+</div>
+
+
+
+<footer class="site-footer outer">
+  <div class="site-footer-content inner">
+    <section class="copyright" style="line-height: 1.3em;">
+      <a href="/">Diego Usai</a> © 2019 <br>
+      <span style="font-size: 0.8em; color: #555;">Hugo port of <a href="https://github.com/TryGhost/Casper">Casper 2.1.7</a> by <a href="https://www.telematika.org">EM</a></span>
+    </section>
+    <nav class="site-footer-nav">
+        <a href="/">Latest Posts</a>
+        
+        
+        <a href="https://github.com/DiegoUsaiUK" target="_blank" rel="noopener">Github</a>
+        <a href="https://www.linkedin.com/in/diegousaiuk" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://medium.com/@diegousaiuk" target="_blank" rel="noopener">Medium</a>
+    </nav>  
+  </div>
+</footer>
+
+</div>
+<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery.fitvids.js"></script>
+
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+    <script>
+
+
+
+
+
+$(document).ready(function () {
+    
+    var $postContent = $(".post-full-content");
+    $postContent.fitVids();
+    
+
+    var progressBar = document.querySelector('progress');
+    var header = document.querySelector('.floating-header');
+    var title = document.querySelector('.post-full-title');
+
+    var lastScrollY = window.scrollY;
+    var lastWindowHeight = window.innerHeight;
+    var lastDocumentHeight = $(document).height();
+    var ticking = false;
+
+    function onScroll() {
+        lastScrollY = window.scrollY;
+        requestTick();
+    }
+
+    function onResize() {
+        lastWindowHeight = window.innerHeight;
+        lastDocumentHeight = $(document).height();
+        requestTick();
+    }
+
+    function requestTick() {
+        if (!ticking) {
+            requestAnimationFrame(update);
+        }
+        ticking = true;
+    }
+
+    function update() {
+        var trigger = title.getBoundingClientRect().top + window.scrollY;
+        var triggerOffset = title.offsetHeight + 35;
+        var progressMax = lastDocumentHeight - lastWindowHeight;
+
+        
+        if (lastScrollY >= trigger + triggerOffset) {
+            header.classList.add('floating-active');
+        } else {
+            header.classList.remove('floating-active');
+        }
+
+        progressBar.setAttribute('max', progressMax);
+        progressBar.setAttribute('value', lastScrollY);
+
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', onResize, false);
+
+    update();
+});
+</script>
+</body></html>

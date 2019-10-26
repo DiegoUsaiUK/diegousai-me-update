@@ -34,7 +34,7 @@
     <meta property="og:description" content="Recently I have completed the online course Business Analysis With R focused on applied data and business science with R, which introduced me to a couple of new" />
 
     <meta property="article:published_time" content="2019-09-22T00:00:00Z" />
-    <meta property="article:tag" content="Machine Learning" /><meta property="article:tag" content="Tidyverse" /><meta property="article:tag" content="Classification" /><meta property="article:tag" content="Churn" /><meta property="article:tag" content="API" />
+    <meta property="article:tag" content="Machine Learning" /><meta property="article:tag" content="Tidyverse" /><meta property="article:tag" content="Classification" />
 
     <meta property="og:image" content="/img/karim-ghantous-vIZGAYbOl30-unsplash.jpg"/>
 
@@ -45,7 +45,7 @@
     <link rel="stylesheet" type="text/css" href="/built/screen.css" /> 
     <link rel="stylesheet" type="text/css" href="/css/casper-two.css" /> 
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css" />
-    
+     <link rel="stylesheet" href="/css/override.css" /> 
 
      
 
@@ -69,7 +69,11 @@
             </li>
         
             <li class="" role="menuitem">
-              <a href="/post">Articles</a>
+              <a href="/categories/articles/">Articles</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/categories/market-basket-analysis">projects</a>
             </li>
         
             <li class="" role="menuitem">
@@ -78,6 +82,10 @@
         
             <li class="" role="menuitem">
               <a href="/page/about/">About</a>
+            </li>
+        
+            <li class="" role="menuitem">
+              <a href="/page/contact/">Contact</a>
             </li>
         
       </ul></div>
@@ -128,8 +136,7 @@
 <p>Although there are a number of packages at different stages in their development, I have decided to take <code>tidymodels</code> “for a spin”, so to speak, and create and execute a “tidy” modelling workflow to tackle a <strong>classification</strong> problem. My aim is to show how easy it is to fit a simple <strong>logistic regression</strong> in R’s <code>glm</code> and quickly switch to a cross-validated <strong>random forest</strong> using the <code>ranger</code> engine by changing only a few lines of code.</p>
 <p>For this post in particular I’m focusing on four different libraries from the <code>tidymodels</code> suite: <code>rsample</code> for data sampling and cross-validation, <code>recipes</code> for data preprocessing, <code>parsnip</code> for model set up and estimation, and <code>yardstick</code> for model assessment.</p>
 <p><strong>Note that</strong> the focus is on modelling workflow and libraries interaction. For that reason, I am keeping data exploration and feature engineering to a minimum.</p>
-<div id="set-up" class="section level2">
-<h2>Set up</h2>
+<p><strong>SET UP</strong></p>
 <p>First, I load the packages I need for this analysis.</p>
 <pre class="r"><code>library(tidymodels)
 library(skimr)
@@ -139,41 +146,6 @@ library(tibble)</code></pre>
 <pre class="r"><code>telco &lt;- readr::read_csv(&quot;WA_Fn-UseC_-Telco-Customer-Churn.csv&quot;)</code></pre>
 <pre class="r"><code>telco %&gt;% 
   skimr::skim()</code></pre>
-<pre><code>## Skim summary statistics
-##  n obs: 7043 
-##  n variables: 21 
-## 
-## -- Variable type:character -------------------------------------------------------
-##          variable missing complete    n min max empty n_unique
-##             Churn       0     7043 7043   2   3     0        2
-##          Contract       0     7043 7043   8  14     0        3
-##        customerID       0     7043 7043  10  10     0     7043
-##        Dependents       0     7043 7043   2   3     0        2
-##  DeviceProtection       0     7043 7043   2  19     0        3
-##            gender       0     7043 7043   4   6     0        2
-##   InternetService       0     7043 7043   2  11     0        3
-##     MultipleLines       0     7043 7043   2  16     0        3
-##      OnlineBackup       0     7043 7043   2  19     0        3
-##    OnlineSecurity       0     7043 7043   2  19     0        3
-##  PaperlessBilling       0     7043 7043   2   3     0        2
-##           Partner       0     7043 7043   2   3     0        2
-##     PaymentMethod       0     7043 7043  12  25     0        4
-##      PhoneService       0     7043 7043   2   3     0        2
-##   StreamingMovies       0     7043 7043   2  19     0        3
-##       StreamingTV       0     7043 7043   2  19     0        3
-##       TechSupport       0     7043 7043   2  19     0        3
-## 
-## -- Variable type:numeric ---------------------------------------------------------
-##        variable missing complete    n    mean      sd    p0    p25     p50
-##  MonthlyCharges       0     7043 7043   64.76   30.09 18.25  35.5    70.35
-##   SeniorCitizen       0     7043 7043    0.16    0.37  0      0       0   
-##          tenure       0     7043 7043   32.37   24.56  0      9      29   
-##    TotalCharges      11     7032 7043 2283.3  2266.77 18.8  401.45 1397.47
-##      p75    p100
-##    89.85  118.75
-##     0       1   
-##    55      72   
-##  3794.74 8684.8</code></pre>
 <p>There are a couple of things to notice here:</p>
 <ul>
 <li><p><strong>customerID</strong> is a unique identifier for each row. As such it has no descriptive or predictive power and it needs to be removed.</p></li>
@@ -183,12 +155,9 @@ library(tibble)</code></pre>
   telco %&gt;%
   select(-customerID) %&gt;%
   drop_na()</code></pre>
-</div>
-<div id="modelling-with-tidymodels" class="section level2">
-<h2>Modelling with <code>tidymodels</code></h2>
+<p><strong>MODELLING WITH TIDYMODELS</strong></p>
 <p>To show the basic steps in the <code>tidymodels</code> framework I am fitting and evaluating a simple <strong>logistic regression</strong> model.</p>
-<div id="train-and-test-split" class="section level3">
-<h3>Train and test split</h3>
+<p><strong>Train and test split</strong></p>
 <p><code>rsample</code> provides a streamlined way to create a randomised training and test split of the original data.</p>
 <pre class="r"><code>set.seed(seed = 1972) 
 
@@ -198,14 +167,11 @@ train_test_split &lt;-
     prop = 0.80   
   ) 
 
-train_test_split
-## &lt;5626/1406/7032&gt;</code></pre>
+train_test_split</code></pre>
 <p>Of the 7,043 total customers, 5,626 have been assigned to the training set and 1,406 to the test set. I save them as <code>train_tbl</code> and <code>test_tbl</code>.</p>
 <pre class="r"><code>train_tbl &lt;- train_test_split %&gt;% training() 
 test_tbl  &lt;- train_test_split %&gt;% testing() </code></pre>
-</div>
-<div id="a-simple-recipe" class="section level3">
-<h3>A simple recipe</h3>
+<p><strong>A simple recipe</strong></p>
 <p>The <code>recipes</code> package uses a <strong>cooking metaphor</strong> to handle all the data preprocessing, like missing values imputation, removing predictors, centring and scaling, one-hot-encoding, and more.</p>
 <p>First, I create a <code>recipe</code> where I define the transformations I want to apply to my data. In this case I create a simple recipe to change all character variables to factors.</p>
 <p>Then, I <em>“prep the recipe”</em> by mixing the ingredients with <code>prep</code>. Here I have included the prep bit in the recipe function for brevity.</p>
@@ -219,9 +185,7 @@ test_tbl  &lt;- train_test_split %&gt;% testing() </code></pre>
 <p>Finally, to continue with the cooking metaphor, I <em>“bake the recipe”</em> to apply all preprocessing to the data sets.</p>
 <pre class="r"><code>train_baked &lt;- bake(recipe_prepped, new_data = train_tbl)
 test_baked  &lt;- bake(recipe_prepped, new_data = test_tbl)</code></pre>
-</div>
-<div id="fit-the-model" class="section level3">
-<h3>Fit the model</h3>
+<p><strong>Fit the model </strong></p>
 <p><code>parsnip</code> is a relatively recent addition to the <code>tidymodels</code> suite and is probably the one I like best. This package offers a unified API that allows access to several machine learning packages without the need to learn the syntax of each individual one.</p>
 <p>With 3 simple steps you can:</p>
 <ul>
@@ -234,24 +198,13 @@ test_baked  &lt;- bake(recipe_prepped, new_data = test_tbl)</code></pre>
   set_engine(&quot;glm&quot;) %&gt;%
   fit(Churn ~ ., data = train_baked)</code></pre>
 <p>If you want to use another engine you can simply switch the <code>set_engine</code> argument (for <em>logistic regression</em> you can choose from <code>glm</code>, <code>glmnet</code>, <code>stan</code>, <code>spark</code>, and <code>keras</code>) and <code>parsnip</code> will take care of changing everything else for you behind the scenes.</p>
-</div>
-<div id="performance-assessment" class="section level3">
-<h3>Performance assessment</h3>
+<p><strong>Performance assessment</strong></p>
 <p>The <code>yardstick</code> package provides an easy way to calculate several assessment measures. But before I can evaluate my model’s performance, I need to calculate some predictions by passing the <code>test_baked</code> data to the <code>predict</code> function.</p>
 <pre class="r"><code>predictions_glm &lt;- logistic_glm %&gt;%
   predict(new_data = test_baked) %&gt;%
   bind_cols(test_baked %&gt;% select(Churn))
 
-head(predictions_glm)
-## # A tibble: 6 x 2
-##   .pred_class Churn
-##   &lt;fct&gt;       &lt;fct&gt;
-## 1 Yes         No   
-## 2 No          No   
-## 3 No          No   
-## 4 No          No   
-## 5 No          No   
-## 6 No          No</code></pre>
+head(predictions_glm)</code></pre>
 <p>There are several metrics that can be used to investigate the performance of a classification model but for simplicity I’m only focusing on a selection of them: <strong>accuracy</strong>, <strong>precision</strong>, <strong>recall</strong> and <strong>F1_Score</strong>.</p>
 <p>All of these measures (and many more) can be derived by the <a href="https://en.wikipedia.org/wiki/Confusion_matrix"><strong>Confusion Matrix</strong></a>, a table used to describe the performance of a classification model on a set of test data for which the true values are known.</p>
 <p>In and of itself, the confusion matrix is a relatively easy concept to get your head around as is shows the number of <em>false positives</em>, <em>false negatives</em>, <em>true positives</em>, and <em>true negatives</em>. However some of the measures that are derived from it may take some reasoning with to fully understand their meaning and use.</p>
@@ -262,7 +215,6 @@ head(predictions_glm)
   ggplot(aes(Prediction, Truth, alpha = n)) +
   geom_tile(show.legend = FALSE) +
   geom_text(aes(label = n), colour = &quot;white&quot;, alpha = 1, size = 8)</code></pre>
-<p><img src="/post/Tidymodels_Classification_Churn_files/figure-html/unnamed-chunk-10-1.png" width="80%" height="100%" style="display: block; margin: auto;" /></p>
 <p>The model’s <strong>Accuracy</strong> is the fraction of predictions the model got right and can be easily calculated by passing the <code>predictions_glm</code> to the <code>metrics</code> function. However, accuracy is not a very reliable metric as it will provide misleading results if the data set is unbalanced.</p>
 <p>With only basic data manipulation and feature engineering the simple logistic model has achieved 80% accuracy.</p>
 <pre class="r"><code>predictions_glm %&gt;%
@@ -270,20 +222,6 @@ head(predictions_glm)
   select(-.estimator) %&gt;%
   filter(.metric == &quot;accuracy&quot;) %&gt;%
   kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="center">.metric</th>
-<th align="center">.estimate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">accuracy</td>
-<td align="center">0.8058321</td>
-</tr>
-</tbody>
-</table>
 <p><strong>Precision</strong> shows how sensitive models are to <em>False Positives</em> (i.e. predicting a customer is leaving when he-she is actually staying) whereas <strong>Recall</strong> looks at how sensitive models are to <em>False Negatives</em> (i.e. forecasting that a customer is staying whilst he-she is in fact leaving).</p>
 <p>These are <strong>very relevant business metrics</strong> because organisations are particularly interested in accurately predicting which customers are truly at risk of leaving so that they can target them with retention strategies. At the same time they want to minimising efforts of retaining customers incorrectly classified as leaving who are instead staying.</p>
 <pre class="r"><code>tibble(
@@ -296,72 +234,23 @@ head(predictions_glm)
 ) %&gt;%
   unnest() %&gt;%
   kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="center">precision</th>
-<th align="center">recall</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">0.8466368</td>
-<td align="center">0.9024857</td>
-</tr>
-</tbody>
-</table>
 <p>Another popular performance assessment metric is the <a href="https://en.wikipedia.org/wiki/F1_score"><strong>F1 Score</strong></a>, which is the harmonic average of the <a href="https://en.wikipedia.org/wiki/Precision_(information_retrieval)">precision</a> and <a href="https://en.wikipedia.org/wiki/Recall_(information_retrieval)">recall</a>. An F1 score reaches its best value at 1 with perfect <em>precision</em> and <em>recall</em>.</p>
 <pre class="r"><code>predictions_glm %&gt;%
   f_meas(Churn, .pred_class) %&gt;%
   select(-.estimator) %&gt;%
   kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="center">.metric</th>
-<th align="center">.estimate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">f_meas</td>
-<td align="center">0.8736696</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div id="a-random-forest" class="section level2">
-<h2>A Random Forest</h2>
+<p><strong>A RANDOM FOREST</strong></p>
 <p>This is where the real beauty of <code>tidymodels</code> comes into play. Now I can use this tidy modelling framework to fit a <strong>Random Forest</strong> model with the <code>ranger</code> engine.</p>
-<div id="cross-validation-set-up" class="section level3">
-<h3>Cross-validation set up</h3>
+<p><strong>Cross-validation set up</strong></p>
 <p>To further refine the model’s predictive power, I am implementing a <strong>10-fold cross validation</strong> using <code>vfold_cv</code> from <code>rsample</code>, which splits again the initial training data.</p>
 <pre class="r"><code>cross_val_tbl &lt;- vfold_cv(train_tbl, v = 10)
 
-cross_val_tbl
-## #  10-fold cross-validation 
-## # A tibble: 10 x 2
-##    splits             id    
-##    &lt;named list&gt;       &lt;chr&gt; 
-##  1 &lt;split [5.1K/563]&gt; Fold01
-##  2 &lt;split [5.1K/563]&gt; Fold02
-##  3 &lt;split [5.1K/563]&gt; Fold03
-##  4 &lt;split [5.1K/563]&gt; Fold04
-##  5 &lt;split [5.1K/563]&gt; Fold05
-##  6 &lt;split [5.1K/563]&gt; Fold06
-##  7 &lt;split [5.1K/562]&gt; Fold07
-##  8 &lt;split [5.1K/562]&gt; Fold08
-##  9 &lt;split [5.1K/562]&gt; Fold09
-## 10 &lt;split [5.1K/562]&gt; Fold10</code></pre>
+cross_val_tbl</code></pre>
 <p>If we take a further look, we should recognise the 5,626 number, which is the total number of observations in the initial <code>train_tbl</code>. In each round, 563 observations will in turn be retained from estimation and used to validate the model for that fold.</p>
 <pre class="r"><code>cross_val_tbl$splits %&gt;%
-  pluck(1)
-## &lt;5063/563/5626&gt;</code></pre>
+  pluck(1)</code></pre>
 <p>To avoid confusion and distinguish the <em>initial train/test splits</em> from those used for cross validation, the author of <code>rsample</code> <strong>Max Kuhn</strong> has coined two new terms: the <code>analysis</code> and the <code>assessment</code> sets. The former is the portion of the train data used to recursively estimate the model, where the latter is the portion used to validate each estimate.</p>
-</div>
-<div id="update-the-recipe" class="section level3">
-<h3>Update the recipe</h3>
+<p><strong>Update the recipe</strong></p>
 <p><strong>NOTE</strong> that a random forest needs <em>all numeric</em> variables to be <em>centred and scaled</em> and all <em>character/factor</em> variables to be <em>“dummified”</em>. This is easily done by updating the recipe with these transformations.</p>
 <pre class="r"><code>recipe_rf &lt;- function(dataset) {
   recipe(Churn ~ ., data = dataset) %&gt;%
@@ -371,9 +260,7 @@ cross_val_tbl
     step_scale(all_numeric()) %&gt;%
     prep(data = dataset)
 }</code></pre>
-</div>
-<div id="estimate-the-model" class="section level3">
-<h3>Estimate the model</h3>
+<p><strong>Estimate the model</strong></p>
 <p>Switching to another model could not be simpler! All I need to do is to change the <strong>type of model</strong> to <code>random_forest</code> and add its hyper-parameters, change the <strong>set_engine</strong> argument to <code>ranger</code> and I’m ready to go.</p>
 <p>I’m bundling all steps into a function that estimates the model across all folds, runs predictions and returns a convenient tibble with all the results. I need to add an extra step before the recipe “prepping” to maps the cross validation splits to the <code>analysis</code> and <code>assessment</code> functions. This will guide the iterations through the 10 folds.</p>
 <pre class="r"><code>rf_fun &lt;- function(split, id, try, tree) {
@@ -406,9 +293,7 @@ cross_val_tbl
   )
   
 }</code></pre>
-</div>
-<div id="performance-assessment-1" class="section level3">
-<h3>Performance assessment</h3>
+<p><strong>Performance assessment</strong></p>
 <p>All I have left to do is mapping the formula to a data frame.</p>
 <pre class="r"><code>pred_rf &lt;- map2_df(
   .x = cross_val_tbl$splits,
@@ -416,16 +301,7 @@ cross_val_tbl
   ~ rf_fun(split = .x, id = .y, try = 3, tree = 200)
 )
 
-head(pred_rf)
-## # A tibble: 6 x 3
-##   id     truth prediction
-##   &lt;chr&gt;  &lt;fct&gt; &lt;fct&gt;     
-## 1 Fold01 Yes   Yes       
-## 2 Fold01 Yes   No        
-## 3 Fold01 Yes   Yes       
-## 4 Fold01 No    No        
-## 5 Fold01 No    No        
-## 6 Fold01 Yes   No</code></pre>
+head(pred_rf)</code></pre>
 <p>I’ve found that <code>yardstick</code> has a very handy confusion matrix <code>summary</code> function, which returns an array of <strong>13 different metrics</strong> but in this case I want to see the four I used for the <code>glm</code> model.</p>
 <pre class="r"><code>pred_rf %&gt;%
   conf_mat(truth, prediction) %&gt;%
@@ -434,52 +310,18 @@ head(pred_rf)
   filter(.metric %in%
     c(&quot;accuracy&quot;, &quot;precision&quot;, &quot;recall&quot;, &quot;f_meas&quot;)) %&gt;%
   kable()</code></pre>
-<table>
-<thead>
-<tr class="header">
-<th align="center">.metric</th>
-<th align="center">.estimate</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="center">accuracy</td>
-<td align="center">0.7979026</td>
-</tr>
-<tr class="even">
-<td align="center">precision</td>
-<td align="center">0.8250436</td>
-</tr>
-<tr class="odd">
-<td align="center">recall</td>
-<td align="center">0.9186301</td>
-</tr>
-<tr class="even">
-<td align="center">f_meas</td>
-<td align="center">0.8693254</td>
-</tr>
-</tbody>
-</table>
 <p>The <code>random forest</code> model is performing in par with the simple <code>logistic regression</code>. Given the very basic feature engineering that I’ve carried out, there is scope to further improve the model but this is beyond the scope of this post.</p>
-</div>
-</div>
-<div id="closing-considerations" class="section level2">
-<h2>Closing considerations</h2>
+<p><strong>CLOSING CONSIDERATIONS</strong></p>
 <p>One of the great advantage of <code>tidymodels</code> is the flexibility and ease of access to every phase of the analysis workflow. Creating the modelling pipeline is a breeze and you can easily re-use the initial framework by changing model type with <code>parsnip</code> and data pre-processing with <code>recipes</code> and in no time you’re ready to check your new model’s performance with <code>yardstick</code>.</p>
 <p>In any analysis you would typically audit several models and <code>parsnip</code> frees you up from having to learn the unique syntax of every modelling engine so that you can focus on finding the best solution for the problem at hand.</p>
-<div id="code-repository" class="section level3">
-<h3>Code repository</h3>
+<p><strong>Code repository</strong></p>
 <p>The full R code can be found on <a href="https://github.com/DiegoUsaiUK/Classification_Churn_with_Parsnip">my GitHub profile</a></p>
-</div>
-<div id="references" class="section level3">
-<h3>References</h3>
+<p><strong>References</strong></p>
 <ul>
 <li>Big thanks to <em>Bruno Rodrigues</em> for the article that provided the inspiration for the big evaluation formula <a href="https://www.brodrigues.co/blog/2018-11-25-tidy_cv/">A tutorial on tidy cross-validation with R</a></li>
 <li>More thanks to <em>Benjamin Sorensen</em> for his thoughtful piece on <a href="https://www.benjaminsorensen.me/post/modeling-with-parsnip-and-tidymodels/">Modeling with <code>parsnip</code> and <code>tidymodels</code></a></li>
 <li>For an introduction to <a href="https://www.tidyverse.org/articles/2018/11/parsnip-0-0-1/"><code>parsnip</code></a></li>
 </ul>
-</div>
-</div>
     
         </div>
     </section>
@@ -506,32 +348,60 @@ head(pred_rf)
   <div class="inner">
     <div class="read-next-feed">      
       
+<article class="read-next-card" 
+            style="background-image: url(/img/simon-zhu-TfRHSL2GKDc-unsplash.jpg);" >
+    <header class="read-next-card-header">
+        <small class="read-next-card-header-sitetitle">&mdash; Lifelong Learning &mdash;</small>
+        
+        <h3 class="read-next-card-header-title"><a href="/tags/machine-learning/">#Machine Learning</a></h3>
+    </header>
+    <div class="read-next-divider"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 14.5s2 3 5 3 5.5-2.463 5.5-5.5S21 6.5 18 6.5c-5 0-7 11-12 11C2.962 17.5.5 15.037.5 12S3 6.5 6 6.5s4.5 3.5 4.5 3.5"/></svg>
+    </div>
+
+    <div class="read-next-card-content">
+      
+        <ul>
+                      
+        
+          <li><a href="/2019/03/market-basket-analysis-part-2-of-3/">Market Basket Analysis - Part 2 of 3: Market Basket Analysis with recommenderlab</a></li>            
+        
+          <li><a href="/2019/09/loading-merging-and-joining-datasets/">Loading, Merging and Joining Datasets</a></li>            
+        
+          <li><a href="/2019/03/market-basket-analysis-part-1-of-3/">Market Basket Analysis - Part 1 of 3: Data Preparation and Exploratory Data Analysis</a></li>            
+        
+          <li><a href="/2019/05/a-gentle-introduction-to-customer-segmentation/">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</a></li>            
+        </ul>
+    </div>
+    <footer class="read-next-card-footer">
+      
+        <a href="/tags/machine-learning/">See all related posts →</a>
+    </footer>
+</article>
+
 
       
       <article class="post-card post"> 
     
-    <a class="post-card-image-link" href="/2019/09/loading-merging-and-joining-datasets/">
-      <div class="post-card-image" style="background-image: url(/img/stefan-kunze-v8SjXTTI0GA-unsplash.jpg)"></div>
+    <a class="post-card-image-link" href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/">
+      <div class="post-card-image" style="background-image: url(/img/toa-heftiba-9Xfn1rEpL0c-unsplash.jpg)"></div>
     </a>
     
 
     <div class="post-card-content">
-      <a class="post-card-content-link" href="/2019/09/loading-merging-and-joining-datasets/">
+      <a class="post-card-content-link" href="/2019/09/steps-and-considerations-to-run-a-successful-segmentation/">
           <header class="post-card-header">
               <span class="post-card-tags">
-              #Data Cleaning 
-              #Data Mining 
-              #Data Wrangling 
-              #Data Management  </span>
+              #Principal Component 
+              #Bootstrap 
+              #Clustering 
+              #Customer Segmentation  </span>
               
-              <h2 class="post-card-title">Loading, Merging and Joining Datasets</h2>
+              <h2 class="post-card-title">Steps and considerations to run a successful segmentation with K-means, Principal Components Analysis and Bootstrap Evaluation</h2>
           </header>
           <section class="post-card-excerpt">
               
-                <p>This is the minimal coding necessary to assemble various data feeds and sort out the likes of variables naming &amp; new features creation plus some general housekeeping tasks. It includes general housekeeping tasks like sorting variables names, creating essential features and sorting out variables order
-I will continue to add to this code should the need arise for other features to be created.
-THE DATASET
-library(tidyverse)library(lubridate)library(readr)The dataset I’m using here accompanies a Redbooks publication called Building 360-Degree Information Applications which is available as a free PDF download. ...  </p>
+                <p>Clustering is one of my favourite analytic methods: it resonates well with clients as I’ve found from my consulting experience, and is a relatively straightforward concept to explain non technical audiences.
+Earlier this year I’ve used the popular K-Means clustering algorithm to segment customers based on their response to a series of marketing campaigns. For that post I’ve deliberately used a basic dataset to show that it is not only a relatively easy analysis to carry out but can also help unearthing interesting patterns of behaviour in your customer base even when using few customer attributes. ...  </p>
               
           </section>
       </a>
@@ -546,22 +416,19 @@ library(tidyverse)library(lubridate)library(readr)The dataset I’m using her
       
       <article class="post-card post"> 
     
-    <a class="post-card-image-link" href="/2019/05/an-introduction-to-customer-segmentation/">
+    <a class="post-card-image-link" href="/2019/05/a-gentle-introduction-to-customer-segmentation/">
       <div class="post-card-image" style="background-image: url(/img/nick-karvounis-SWIoVDRZWUY-unsplash.jpg)"></div>
     </a>
     
 
     <div class="post-card-content">
-      <a class="post-card-content-link" href="/2019/05/an-introduction-to-customer-segmentation/">
+      <a class="post-card-content-link" href="/2019/05/a-gentle-introduction-to-customer-segmentation/">
           <header class="post-card-header">
               <span class="post-card-tags">
-              #Unsupervised Learning 
-              #K Means Clustering 
-              #Customer Segmentation 
-              #Machine Learning 
-              #Marketing Strategies  </span>
+              #Clustering 
+              #Customer Segmentation  </span>
               
-              <h2 class="post-card-title">An Introduction to Customer Segmentation: Using K-Means Clustering to Understand Marketing Response</h2>
+              <h2 class="post-card-title">A gentle Introduction to Customer Segmentation - Using K-Means Clustering to Understand Marketing Response</h2>
           </header>
           <section class="post-card-excerpt">
               
